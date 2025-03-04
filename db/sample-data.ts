@@ -90,7 +90,7 @@ const sampleData = {
       banner: null,
     },
     {
-      name: 'Polo Ralph Lauren Oxford Shirt',
+      name: 'Polo Ralph Lauren Oxford ',
       slug: 'polo-ralph-lauren-oxford-shirt',
       category: "Men's Dress Shirts",
       description: 'Iconic Polo design with refined oxford fabric',
