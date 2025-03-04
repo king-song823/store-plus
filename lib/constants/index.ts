@@ -14,10 +14,10 @@ export const signInDefaultValues = {
 };
 
 export const signUpDefaultValues = {
-  name: 'User',
-  email: 'user1@gmail.com',
-  password: '123456',
-  confirmPassword: '123456',
+  name: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
 };
 
 export const shippingAddressDefaultValues = {
