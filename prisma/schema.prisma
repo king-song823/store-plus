@@ -21,6 +21,7 @@ model Product {
   name        String
   slug        String      @unique(map: "product_slug_idx")
   category    String
+  files       Json[]
   images      String[]
   brand       String
   description String

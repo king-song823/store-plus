@@ -41,14 +41,15 @@ export const productDefaultValues = {
   slug: '',
   category: '',
   images: [],
+  files: [],
   brand: '',
   description: '',
   price: '',
   stock: 0,
   rating: '',
   numReviews: '',
-  isFeatured: false,
-  banner: null,
+  // isFeatured: false,
+  // banner: null,
 };
 
 export const USER_ROLES = process.env.USER_ROLES

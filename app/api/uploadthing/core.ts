@@ -5,7 +5,7 @@ import { auth } from '@/auth';
 const f = createUploadthing();
 
 export const ourFileRouter = {
-  imageUploader: f({ image: { maxFileSize: '4MB' } })
+  imageUploader: f({ image: { maxFileSize: '8MB' } })
     .middleware(async () => {
       const session = await auth();
 
@@ -14,6 +14,17 @@ export const ourFileRouter = {
       return { userId: session?.user.id };
     })
     .onUploadComplete(async ({ metadata }) => {
+      return { uploadedBy: metadata.userId };
+    }),
+  pdfUploader: f({ blob: { maxFileSize: '32MB' } })
+    .middleware(async () => {
+      const session = await auth();
+
+      if (!session) throw new UploadThingError('Unauthorized');
+
+      return { userId: session?.user.id };
+    })
+    .onUploadComplete(({ metadata }) => {
       return { uploadedBy: metadata.userId };
     }),
 } satisfies FileRouter;

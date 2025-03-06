@@ -23,8 +23,10 @@ import { toast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { UploadButton } from '@/lib/uploadthing';
 import { Card, CardContent } from '@/components/ui/card';
+import { X } from 'lucide-react';
 import Image from 'next/image';
-import { Checkbox } from '@/components/ui/checkbox';
+import Link from 'next/link';
+// import { Checkbox } from '@/components/ui/checkbox';
 
 const ProductForm = ({
   type,
@@ -44,9 +46,8 @@ const ProductForm = ({
       product && type === 'Update' ? product : productDefaultValues,
   });
 
+  const files = form.watch('files');
   const images = form.watch('images');
-  const isFeatured = form.watch('isFeatured');
-  const banner = form.watch('banner');
 
   const router = useRouter();
 
@@ -247,7 +248,67 @@ const ProductForm = ({
           />
         </div>
         <div className="upload-field flex flex-col gap-5 md:flex-row">
-          {/* Images */}
+          {/* Files */}
+          <FormField
+            control={form.control}
+            name="files"
+            render={() => (
+              <FormItem className="w-full">
+                <FormLabel>Files</FormLabel>
+                <Card>
+                  <CardContent className="space-y-2 mt-2 min-h-48">
+                    <div className="flex-start space-x-2">
+                      {files.map((file, index: number) => (
+                        <div
+                          key={file.url}
+                          className="flex justify-center items-center gap-2"
+                        >
+                          <Link href={file.url} target="_blank">
+                            {file.name}
+                          </Link>
+                          <button
+                            className=" bg-red-500 text-white rounded-full p-1"
+                            onClick={() => {
+                              const newFiles = files.filter(
+                                (_, i) => i !== index
+                              );
+                              form.setValue('files', newFiles);
+                            }}
+                          >
+                            <X className="text-white" size={12} />
+                          </button>
+                        </div>
+                      ))}
+
+                      <FormControl>
+                        <UploadButton
+                          endpoint="pdfUploader"
+                          onClientUploadComplete={(
+                            res: { url: string; name: string }[]
+                          ) => {
+                            form.setValue('files', [
+                              ...files,
+                              { name: res[0].name, url: res[0].url },
+                            ]);
+                          }}
+                          onUploadError={(error: Error) => {
+                            toast({
+                              variant: 'destructive',
+                              description: `ERROR! ${error.message}`,
+                            });
+                          }}
+                        />
+                      </FormControl>
+                    </div>
+                  </CardContent>
+                </Card>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="upload-field md:flex-row">
+          {/*Images */}
           <FormField
             control={form.control}
             name="images"
@@ -257,16 +318,34 @@ const ProductForm = ({
                 <Card>
                   <CardContent className="space-y-2 mt-2 min-h-48">
                     <div className="flex-start space-x-2">
-                      {images.map((image: string) => (
-                        <Image
+                      {images.map((image: string, index: number) => (
+                        <div
                           key={image}
-                          src={image}
-                          alt="product image"
-                          className="w-20 h-20 object-cover object-center rounded-sm"
-                          width={100}
-                          height={100}
-                        />
+                          className="flex justify-center items-center gap-2"
+                        >
+                          <Image
+                            key={image}
+                            src={image}
+                            alt="product image"
+                            className="w-20 h-20 object-cover object-center rounded-sm"
+                            width={100}
+                            height={100}
+                            unoptimized
+                          />
+                          <button
+                            className=" bg-red-500 text-white rounded-full p-1"
+                            onClick={() => {
+                              const newImages = images.filter(
+                                (_, i) => i !== index
+                              );
+                              form.setValue('images', newImages);
+                            }}
+                          >
+                            <X className="text-white" size={12} />
+                          </button>
+                        </div>
                       ))}
+
                       <FormControl>
                         <UploadButton
                           endpoint="imageUploader"
@@ -288,54 +367,6 @@ const ProductForm = ({
               </FormItem>
             )}
           />
-        </div>
-        <div className="upload-field md:flex-row">
-          {/* Is Featured */}
-          <div className="upload-field">
-            Featured Product
-            <Card>
-              <CardContent className="space-y-2 mt-2  ">
-                <FormField
-                  control={form.control}
-                  name="isFeatured"
-                  render={({ field }) => (
-                    <FormItem className="space-x-2 items-center">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel>Is Featured?</FormLabel>
-                    </FormItem>
-                  )}
-                />
-                {isFeatured && banner && (
-                  <Image
-                    src={banner}
-                    alt="banner image"
-                    className=" w-full object-cover object-center rounded-sm"
-                    width={1920}
-                    height={680}
-                  />
-                )}
-                {isFeatured && !banner && (
-                  <UploadButton
-                    endpoint="imageUploader"
-                    onClientUploadComplete={(res: { url: string }[]) => {
-                      form.setValue('banner', res[0].url);
-                    }}
-                    onUploadError={(error: Error) => {
-                      toast({
-                        variant: 'destructive',
-                        description: `ERROR! ${error.message}`,
-                      });
-                    }}
-                  />
-                )}
-              </CardContent>
-            </Card>
-          </div>
         </div>
         <div>
           {/* Description */}
