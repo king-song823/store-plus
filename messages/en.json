@@ -1,0 +1,10 @@
+{
+  "HomePage": {
+    "title": "Hello world!",
+    "about": "Go to the about page"
+  },
+  "Common": {
+    "NewestArrivals": "Newest Arrivals",
+    "Select_Category": "Select a category"
+  }
+}

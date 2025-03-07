@@ -1,0 +1,26 @@
+{
+  "HomePage": {
+    "title": "你好",
+    "about": "Go to the about page",
+    "NewestArrivals": "最新上架"
+  },
+  "Common": {
+    "Money_Back_Guarantee": "退款保证",
+    "Carts": "购物车",
+    "Flexible_Payment": "灵活支付",
+    "All_Rights_Reserved": "版本所有",
+    "No_Prodcut_Found": "未找到产品",
+    "Select_Category": "选择种类",
+    "Menu": "菜单",
+    "All": "全部",
+    "Search": "查询...",
+    "Order_History": "历史订单",
+    "Admin": "管理员",
+    "User_Profile": "用户信息",
+    "Sign_Out": "登出",
+    "Appearance": "外观",
+    "System_Theme": "跟随系统",
+    "Light_Theme": "浅色风格",
+    "Dark_Theme": "暗黑风格"
+  }
+}
