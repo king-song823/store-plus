@@ -1,7 +1,7 @@
 'use client';
 import { CartItem } from '@/types';
 import { Loader, Minus, Plus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { addItemToCart, removeItemFromCart } from '@/lib/actions/cart.action';
 import { Cart } from '@/types';
@@ -9,6 +9,7 @@ import { useTransition } from 'react';
 import { throttle } from 'lodash';
 import { ToastAction } from '../../ui/toast';
 import { Button } from '../../ui/button';
+import { useTranslations } from 'next-intl';
 
 const AddToCart = ({
   userId,
@@ -21,7 +22,10 @@ const AddToCart = ({
 }) => {
   const router = useRouter();
   const { toast } = useToast();
+  const t = useTranslations('Product');
+
   const [isPending, startTransition] = useTransition();
+  const c = useTranslations('Common');
   const existItem =
     cart && cart.items.find((x) => x.productId === item.productId);
 
@@ -41,7 +45,7 @@ const AddToCart = ({
   const handleAddToCart = () => {
     startTransition(async () => {
       if (!userId) {
-        router.push('/sign-in');
+        router.push('/cart');
         return;
       }
       // addItemCart
@@ -56,14 +60,14 @@ const AddToCart = ({
       }
 
       toast({
-        description: `${item.name} added to the cart`,
+        description: `${item.name} ${c('Added_To_The_Cart')}`,
         action: (
           <ToastAction
             className="bg-primary text-white hover:bg-gray-800"
             onClick={() => router.push('/cart')}
             altText="Go to cart"
           >
-            Go to cart
+            {t('Go_To_Cart')}
           </ToastAction>
         ),
       });
@@ -106,7 +110,7 @@ const AddToCart = ({
       ) : (
         <Plus className="w-4 h-4" />
       )}
-      Add to cart
+      {t('Go_To_Cart')}
     </Button>
   );
 };

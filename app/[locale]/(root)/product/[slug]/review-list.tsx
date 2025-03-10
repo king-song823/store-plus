@@ -16,6 +16,7 @@ import {
 import { Calendar, User } from 'lucide-react';
 import { formatDateTime } from '@/lib/utils';
 import Rating from '@/app/[locale]/components/shared/product/rating';
+import { useTranslations } from 'next-intl';
 
 const ReviewList = ({
   userId,
@@ -43,9 +44,12 @@ const ReviewList = ({
     setReviews([...res.data]);
   };
 
+  const t = useTranslations('Product');
+  const c = useTranslations('Common');
+
   return (
     <div className="space-y-4">
-      {reviews.length === 0 && <div>No reviews yet</div>}
+      {reviews.length === 0 && <div>{t('No_Reviews_Yet')}</div>}
       {userId ? (
         <ReviewForm
           userId={userId}
@@ -54,14 +58,14 @@ const ReviewList = ({
         />
       ) : (
         <div>
-          Please
+          {c('Please')}
           <Link
             className="text-blue-700 px-2"
             href={`/sign-in?callbackUrl=/product/${productSlug}`}
           >
-            sign in
+            {c('Sign_In')}
           </Link>
-          to write a review
+          {t('Write_Review')}
         </div>
       )}
       <div className="flex flex-col gap-3">

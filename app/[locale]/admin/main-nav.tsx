@@ -3,31 +3,19 @@
 import { cn } from '@/lib/utils';
 import { Link } from '@/i18n/navigation';
 import { usePathname } from 'next/navigation';
-
+import { useTranslations } from 'next-intl';
 const links = [
-  {
-    title: 'Overview',
-    href: '/admin/overview',
-  },
-  {
-    title: 'Products',
-    href: '/admin/products',
-  },
-  {
-    title: 'Orders',
-    href: '/admin/orders',
-  },
-  {
-    title: 'Users',
-    href: '/admin/users',
-  },
+  { key: 'Overview', href: '/admin/overview' },
+  { key: 'Products', href: '/admin/products' },
+  { key: 'Orders', href: '/admin/orders' },
+  { key: 'Users', href: '/admin/users' },
 ];
-
 export function MainNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
   const pathname = usePathname();
+  const c = useTranslations('Admin');
 
   return (
     <nav
@@ -43,7 +31,7 @@ export function MainNav({
             pathname.includes(item.href) ? '' : 'text-muted-foreground'
           )}
         >
-          {item.title}
+          {c(item.key)}
         </Link>
       ))}
     </nav>

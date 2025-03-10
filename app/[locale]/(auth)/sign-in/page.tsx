@@ -12,6 +12,7 @@ import { Link } from '@/i18n/navigation';
 import { APP_NAME } from '@/lib/constants';
 import Image from 'next/image';
 import CredentialsSignInForm from './credentials-signin-form';
+import { getTranslations } from 'next-intl/server';
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -20,6 +21,8 @@ const SignIn = async (props: {
   searchParams: Promise<{ callbackUrl: string }>;
 }) => {
   const session = await auth();
+  const t = await getTranslations('Common');
+
   const { callbackUrl } = await props.searchParams;
   if (session) {
     return redirect(callbackUrl ?? '/');
@@ -31,15 +34,15 @@ const SignIn = async (props: {
           <Link href="/" className="flex-center">
             <Image
               priority={true}
-              src="/images/logo.svg"
+              src="/images/logo.webp"
               width={100}
               height={100}
               alt={`${APP_NAME} logo`}
             />
           </Link>
-          <CardTitle className="text-center">Sign In</CardTitle>
+          <CardTitle className="text-center">{t('Sign_In')}</CardTitle>
           <CardDescription className="text-center">
-            Select a method to sign in to your account
+            {t('Login_Method')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

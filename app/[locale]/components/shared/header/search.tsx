@@ -36,7 +36,7 @@ const Search = async () => {
         <Input
           name="q"
           type="text"
-          placeholder={t('Search')}
+          placeholder={t('Search_Loading')}
           className="md:w-[100px] lg:w-[300px]"
         />
         <Button>

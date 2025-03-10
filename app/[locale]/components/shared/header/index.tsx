@@ -14,7 +14,8 @@ const Header = () => {
           <Link href="/" className="flex-start ml-4">
             <Image
               priority={true}
-              src="/images/logo.svg"
+              src="/images/logo.webp"
+              className="rounded"
               width={48}
               height={48}
               alt={`${APP_NAME} logo`}

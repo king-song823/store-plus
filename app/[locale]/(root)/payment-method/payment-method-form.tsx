@@ -1,12 +1,17 @@
 'use client';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { useTransition } from 'react';
 import { paymentMethodSchema } from '@/lib/validator';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { DEFAULT_PAYMENT_METHOD, PAYMENT_METHODS } from '@/lib/constants';
+import {
+  DEFAULT_PAYMENT_METHOD,
+  // PAYMENT_METHODS_EN,
+  // PAYMENT_METHODS_ZH,
+  PAYMENT_METHODS,
+} from '@/lib/constants';
 import {
   Form,
   FormControl,
@@ -22,6 +27,7 @@ import {
   RadioGroupItem,
 } from '@/app/[locale]/components/ui/radio-group';
 import { updateUserPaymentMethod } from '@/lib/actions/user.actions';
+import { useTranslations } from 'next-intl';
 
 const PaymentMethodForm = ({
   preferredPaymentMethod,
@@ -30,6 +36,7 @@ const PaymentMethodForm = ({
 }) => {
   const router = useRouter();
   const { toast } = useToast();
+  // const locale = useLocale();
 
   const form = useForm<z.infer<typeof paymentMethodSchema>>({
     resolver: zodResolver(paymentMethodSchema),
@@ -37,6 +44,8 @@ const PaymentMethodForm = ({
       type: preferredPaymentMethod || DEFAULT_PAYMENT_METHOD,
     },
   });
+
+  const c = useTranslations('Common');
 
   const [isPending, startTransition] = useTransition();
 
@@ -59,10 +68,8 @@ const PaymentMethodForm = ({
   return (
     <>
       <div className="max-w-md mx-auto space-y-4">
-        <h1 className="h2-bold mt-4">Payment Method</h1>
-        <p className="text-sm text-muted-foreground">
-          Please select a payment method
-        </p>
+        <h1 className="h2-bold mt-4">{c('Payment_Method')}</h1>
+        <p className="text-sm text-muted-foreground">{c('Selelct_Methods')}</p>
         <Form {...form}>
           <form
             method="post"
@@ -80,22 +87,28 @@ const PaymentMethodForm = ({
                         onValueChange={field.onChange}
                         className="flex flex-col space-y-2"
                       >
-                        {PAYMENT_METHODS.map((paymentMethod) => (
-                          <FormItem
-                            key={paymentMethod}
-                            className="flex items-center space-x-3 space-y-0"
-                          >
-                            <FormControl>
-                              <RadioGroupItem
-                                value={paymentMethod}
-                                checked={field.value === paymentMethod}
-                              />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              {paymentMethod}
-                            </FormLabel>
-                          </FormItem>
-                        ))}
+                        {
+                          // (locale === 'zh'
+                          //   ? PAYMENT_METHODS_ZH
+                          //   : PAYMENT_METHODS_EN
+                          // )
+                          PAYMENT_METHODS.map((paymentMethod) => (
+                            <FormItem
+                              key={paymentMethod}
+                              className="flex items-center space-x-3 space-y-0"
+                            >
+                              <FormControl>
+                                <RadioGroupItem
+                                  value={paymentMethod}
+                                  checked={field.value === paymentMethod}
+                                />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                {paymentMethod}
+                              </FormLabel>
+                            </FormItem>
+                          ))
+                        }
                       </RadioGroup>
                     </FormControl>
                     <FormMessage />
@@ -111,7 +124,7 @@ const PaymentMethodForm = ({
                 ) : (
                   <ArrowRight className="w-4 h-4" />
                 )}{' '}
-                Continue
+                {c('Continue')}
               </Button>
             </div>
           </form>

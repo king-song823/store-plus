@@ -30,6 +30,7 @@ import { toast, useToast } from '@/hooks/use-toast';
 import { useTransition } from 'react';
 import { Button } from '@/app/[locale]/components/ui/button';
 import StripePayment from './stripe-payment';
+import { useTranslations } from 'next-intl';
 // Checks the loading status of the PayPal script
 function PrintLoadingState() {
   const [{ isPending, isRejected }] = usePayPalScriptReducer();
@@ -66,6 +67,10 @@ const OrderDetailsTable = ({
     isDelivered,
     deliveredAt,
   } = order;
+
+  const c = useTranslations('Common');
+  const a = useTranslations('Admin');
+  const p = useTranslations('Product');
 
   // Creates a PayPal order
   const handleCreatePayPalOrder = async () => {
@@ -106,7 +111,7 @@ const OrderDetailsTable = ({
           })
         }
       >
-        {isPending ? 'processing...' : 'Mark As Paid'}
+        {isPending ? c('Processing') : c('Mark_As_Paid')}
       </Button>
     );
   };
@@ -129,32 +134,36 @@ const OrderDetailsTable = ({
           })
         }
       >
-        {isPending ? 'processing...' : 'Mark As Delivered'}
+        {isPending ? c('Processing') : c('Mark_As_Delivered')}
       </Button>
     );
   };
 
   return (
     <>
-      <h1 className="py-4 text-2xl"> Order {formatId(order.id)}</h1>
+      <h1 className="py-4 text-2xl">
+        {' '}
+        {a('Orders')} {formatId(order.id)}
+      </h1>
       <div className="grid md:grid-cols-3 md:gap-5">
         <div className="overflow-x-auto md:col-span-2 space-y-4">
           <Card>
             <CardContent className="p-4 gap-4">
-              <h2 className="text-xl pb-4">Payment Method</h2>
+              <h2 className="text-xl pb-4">{c('Payment_Method')}</h2>
               <p>{paymentMethod}</p>
               {isPaid ? (
                 <Badge variant="secondary">
-                  Paid at {formatDateTime(paidAt!).dateTime}
+                  {c('Paid_At')}
+                  {formatDateTime(paidAt!).dateTime}
                 </Badge>
               ) : (
-                <Badge variant="destructive">Not paid</Badge>
+                <Badge variant="destructive">{c('Not_Paid')}</Badge>
               )}
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 gap-4">
-              <h2 className="text-xl pb-4">Shipping Address</h2>
+              <h2 className="text-xl pb-4">{c('Shipping_Address')}</h2>
               <p>{shippingAddress.fullName}</p>
               <p>
                 {shippingAddress.streetAddress}, {shippingAddress.city},{' '}
@@ -162,22 +171,22 @@ const OrderDetailsTable = ({
               </p>
               {isDelivered ? (
                 <Badge variant="secondary">
-                  Delivered at {formatDateTime(deliveredAt!).dateTime}
+                  {c('Delivered_At')} {formatDateTime(deliveredAt!).dateTime}
                 </Badge>
               ) : (
-                <Badge variant="destructive">Not delivered</Badge>
+                <Badge variant="destructive">{c('Not_Delivered')}</Badge>
               )}
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 gap-4">
-              <h2 className="text-xl pb-4">Order Items</h2>
+              <h2 className="text-xl pb-4">{c('Not_Delivered')}</h2>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Item</TableHead>
-                    <TableHead>Quantity</TableHead>
-                    <TableHead>Price</TableHead>
+                    <TableHead>{p('Item')}</TableHead>
+                    <TableHead>{p('Quantity')}</TableHead>
+                    <TableHead>{p('Price')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -201,7 +210,7 @@ const OrderDetailsTable = ({
                         <span className="px-2">{item.qty}</span>
                       </TableCell>
                       <TableCell className="text-right">
-                        ${item.price}
+                        ¥{item.price}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -213,21 +222,21 @@ const OrderDetailsTable = ({
         <div>
           <Card>
             <CardContent className="p-4 space-y-4 gap-4">
-              <h2 className="text-xl pb-4">Order Summary</h2>
+              <h2 className="text-xl pb-4">{c('Order_Summary')}</h2>
               <div className="flex justify-between">
-                <div>Items</div>
+                <div>{p('Item')}</div>
                 <div>{formatCurrency(itemsPrice)}</div>
               </div>
               <div className="flex justify-between">
-                <div>Tax</div>
+                <div>{c('Tax')}</div>
                 <div>{formatCurrency(taxPrice)}</div>
               </div>
               <div className="flex justify-between">
-                <div>Shipping</div>
+                <div>{c('Shipping_Address')}</div>
                 <div>{formatCurrency(shippingPrice)}</div>
               </div>
               <div className="flex justify-between">
-                <div>Total</div>
+                <div>{a('TOTAL')}</div>
                 <div>{formatCurrency(totalPrice)}</div>
               </div>
               {/* PayPal Payment */}

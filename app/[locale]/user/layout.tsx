@@ -9,12 +9,13 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
     <>
       <div className="flex flex-col">
         <div className="border-b container mx-auto">
-          <div className="flex h-16 items-center px-4">
+          <div className="flex h-16 items-center px-4 ">
             <Link href="/" className="w-22">
               <Image
-                src="/images/logo.svg"
+                src="/images/logo.webp"
                 width={48}
                 height={48}
+                className="rounded"
                 alt={`${APP_NAME} logo`}
               />
             </Link>

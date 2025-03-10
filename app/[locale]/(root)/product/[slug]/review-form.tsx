@@ -38,6 +38,7 @@ import {
   createUpdateReview,
   getReviewByProductId,
 } from '@/lib/actions/review.action';
+import { useTranslations } from 'next-intl';
 
 const ReviewForm = ({
   userId,
@@ -51,6 +52,9 @@ const ReviewForm = ({
   const [open, setOpen] = useState(false);
 
   const { toast } = useToast();
+  const c = useTranslations('Common');
+  const t = useTranslations('Admin');
+  const p = useTranslations('Product');
 
   const form = useForm<z.infer<typeof insertReviewSchema>>({
     resolver: zodResolver(insertReviewSchema),
@@ -98,15 +102,15 @@ const ReviewForm = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Button onClick={handleOpenForm} variant="default">
-        Write a Review
+        {p('Write_Review')}
       </Button>
       <DialogContent className="sm:max-w-[425px]">
         <Form {...form}>
           <form method="POST" onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
-              <DialogTitle>Write a Review</DialogTitle>
+              <DialogTitle>{p('Write_Review')}</DialogTitle>
               <DialogDescription>
-                Share your thoughts with other customers
+                {p('Share_Your_Thoughts_With_Other_Customers')}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -115,9 +119,9 @@ const ReviewForm = ({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel>{c('Title')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter title" {...field} />
+                      <Input placeholder={t('Input_Placeholder')} {...field} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -128,9 +132,12 @@ const ReviewForm = ({
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>{p('Description')}</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Enter description" {...field} />
+                        <Textarea
+                          placeholder={t('Input_Placeholder')}
+                          {...field}
+                        />
                       </FormControl>
                     </FormItem>
                   );
@@ -142,7 +149,7 @@ const ReviewForm = ({
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>Rating</FormLabel>
+                      <FormLabel>{t('RATING')}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value.toString()}
@@ -172,7 +179,9 @@ const ReviewForm = ({
             </div>
             <DialogFooter>
               <Button type="submit" size="lg" className="w-full">
-                {form.formState.isSubmitting ? 'Submitting...' : 'Submit'}
+                {form.formState.isSubmitting
+                  ? t('Submitting_Loading')
+                  : t('Submit')}
               </Button>
             </DialogFooter>
           </form>

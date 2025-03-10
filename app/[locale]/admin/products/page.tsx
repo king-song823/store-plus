@@ -12,6 +12,7 @@ import {
 import { formatCurrency, formatId } from '@/lib/utils';
 import { getAllProducts, deleteProduct } from '@/lib/actions/product.actions';
 import DeleteDialog from '@/app/[locale]/components/shared/delete-dialog';
+import { getTranslations } from 'next-intl/server';
 
 const AdminProductsPage = async (props: {
   searchParams: Promise<{
@@ -21,6 +22,7 @@ const AdminProductsPage = async (props: {
   }>;
 }) => {
   const searchParams = await props.searchParams;
+  const t = await getTranslations('Admin');
 
   const page = Number(searchParams.page) || 1;
   const searchText = searchParams.query || '';
@@ -36,20 +38,20 @@ const AdminProductsPage = async (props: {
     <div className="space-y-2">
       <div className="flex-between items-center">
         <div className="flex gap-5 items-center">
-          <h1 className="h2-bold">Products</h1>
+          <h1 className="h2-bold">{t('Products')}</h1>
           {searchText && (
             <div>
-              Filtered by <i>&quot;{searchText}&quot;</i>{' '}
+              {t('Filtered_By')} <i>&quot;{searchText}&quot;</i>{' '}
               <Link href={`/admin/products`}>
                 <Button variant="outline" size="sm">
-                  Remove Filter
+                  {t('Remove_Filter')}
                 </Button>
               </Link>
             </div>
           )}
         </div>
         <Button asChild variant="default">
-          <Link href="/admin/products/create">Create Product</Link>
+          <Link href="/admin/products/create">{t('Create_Product')}</Link>
         </Button>
       </div>
       <div>
@@ -57,12 +59,12 @@ const AdminProductsPage = async (props: {
           <TableHeader>
             <TableRow>
               <TableHead>ID</TableHead>
-              <TableHead>NAME</TableHead>
-              <TableHead className="text-right">PRICE</TableHead>
-              <TableHead>CATEGORY</TableHead>
-              <TableHead>STOCK</TableHead>
-              <TableHead>RATING</TableHead>
-              <TableHead className="w-[100px]">ACTIONS</TableHead>
+              <TableHead>{t('NAME')}</TableHead>
+              <TableHead className="text-right">{t('Price')}</TableHead>
+              <TableHead>{t('CATEGORY')}</TableHead>
+              <TableHead>{t('STOCK')}</TableHead>
+              <TableHead>{t('RATING')}</TableHead>
+              <TableHead className="w-[100px]">{t('ACTIONS')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

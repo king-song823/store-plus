@@ -18,25 +18,21 @@ import { addItemToCart, removeItemFromCart } from '@/lib/actions/cart.action';
 import { useTransition } from 'react';
 import { Card, CardContent } from '@/app/[locale]/components/ui/card';
 import { formatCurrency } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 
 const CartTable = ({ cart }: { cart?: Cart }) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const t = useTranslations('HomePage');
+  const c = useTranslations('Common');
+  const p = useTranslations('Product');
 
   return (
     <>
-      <h1>
-        客户端:
-        {t('title')}
-      </h1>
-
-      <h1 className=" py-4 h2-bold">Shopping Cart</h1>
+      <h1 className=" py-4 h2-bold">{c('Carts')}</h1>
       {!cart || cart.items.length === 0 ? (
         <div>
-          Cart is empty. <Link href="/">Go shopping</Link>
+          {c('Cart_Is_Empty')} <Link href="/">{c('Go_Shopping')}</Link>
         </div>
       ) : (
         <div className="grid md:grid-cols-4 md:gap-5">
@@ -44,9 +40,9 @@ const CartTable = ({ cart }: { cart?: Cart }) => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Item</TableHead>
-                  <TableHead className="text-center">Quanity</TableHead>
-                  <TableHead className="text-center">Price</TableHead>
+                  <TableHead>{p('Item')}</TableHead>
+                  <TableHead className="text-center">{p('Quantity')}</TableHead>
+                  <TableHead className="text-center">{p('Price')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -122,7 +118,7 @@ const CartTable = ({ cart }: { cart?: Cart }) => {
           <Card>
             <CardContent className="p-4 gap-4">
               <div className="pb-3 text-xl">
-                Subtotal ({cart.items.reduce((a, c) => a + c.qty, 0)}):
+                {p('Subtotal')}({cart.items.reduce((a, c) => a + c.qty, 0)}):
                 <span className="font-bold">
                   {' '}
                   {formatCurrency(cart.itemsPrice)}
@@ -140,7 +136,7 @@ const CartTable = ({ cart }: { cart?: Cart }) => {
                 ) : (
                   <ArrowRight className="w-4 h-4" />
                 )}
-                Proceed to Checkout
+                {p('Proceed_To_Checkout')}
               </Button>
             </CardContent>
           </Card>

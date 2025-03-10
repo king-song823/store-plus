@@ -47,8 +47,8 @@ export const round2 = (value: number | string) => {
   }
 };
 
-const CURRENCY_FORMATTER = new Intl.NumberFormat('en-US', {
-  currency: 'USD',
+const CURRENCY_FORMATTER = new Intl.NumberFormat('zh-CN', {
+  currency: 'CNY', // 人民币
   style: 'currency',
   minimumFractionDigits: 2,
 });

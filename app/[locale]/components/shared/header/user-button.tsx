@@ -18,8 +18,8 @@ const UserButton = async () => {
 
   if (!session) {
     return (
-      <Link href="/api/auth/signin">
-        <Button>Sign In</Button>
+      <Link href="/sign-in">
+        <Button>{t('Sign_In')}</Button>
       </Link>
     );
   }

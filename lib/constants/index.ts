@@ -28,12 +28,10 @@ export const shippingAddressDefaultValues = {
   country: '',
 };
 
-export const PAYMENT_METHODS = process.env.PAYMENT_METHODS
-  ? process.env.PAYMENT_METHODS.split(', ')
-  : ['PayPal', 'Stripe', 'CashOnDelivery'];
-export const DEFAULT_PAYMENT_METHOD =
-  process.env.DEFAULT_PAYMENT_METHOD || 'PayPal';
-
+export const PAYMENT_METHODS_ZH = ['支付宝支付', '微信支付'];
+export const PAYMENT_METHODS_EN = ['Alipay Payment', 'WeChat Pay'];
+export const DEFAULT_PAYMENT_METHOD = 'PayPal';
+export const PAYMENT_METHODS = ['PayPal', 'Stripe', 'CashOnDelivery'];
 export const PAGE_SIZE = Number(process.env.PAGE_SIZE) || 10;
 export const productDefaultValues = {
   id: '',

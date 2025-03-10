@@ -4,9 +4,11 @@ import { useFormStatus } from 'react-dom';
 import { Button } from '@/app/[locale]/components/ui/button';
 import { createOrder } from '@/lib/actions/order.action';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 const PlaceOrderForm = () => {
   const router = useRouter();
+  const c = useTranslations('Common');
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const res = await createOrder();
@@ -23,7 +25,7 @@ const PlaceOrderForm = () => {
         ) : (
           <Check className="w-4 h-4" />
         )}{' '}
-        Place Order
+        {c('Place_Order')}
       </Button>
     );
   };

@@ -20,6 +20,7 @@ import {
 import { Link } from '@/i18n/navigation';
 import Charts from './charts';
 import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard',
@@ -35,14 +36,17 @@ const AdminOverviewPage = async () => {
 
   // Get order summary
   const summary = await getOrderSummary();
+  const t = await getTranslations('Admin');
 
   return (
     <div className="space-y-2">
-      <h1 className="h2-bold">Dashboard</h1>
+      <h1 className="h2-bold">{t('Dashboard')}</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {t('Total_Revenue')}
+            </CardTitle>
             <BadgeDollarSign />
           </CardHeader>
           <CardContent>
@@ -57,7 +61,7 @@ const AdminOverviewPage = async () => {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Sales</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('Sales')}</CardTitle>
             <CreditCard />
           </CardHeader>
           <CardContent>
@@ -68,7 +72,9 @@ const AdminOverviewPage = async () => {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Customers</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {t('Customers')}
+            </CardTitle>
             <Users />
           </CardHeader>
           <CardContent>
@@ -77,7 +83,10 @@ const AdminOverviewPage = async () => {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Products</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {' '}
+              {t('Products')}
+            </CardTitle>
             <Barcode />
           </CardHeader>
           <CardContent>
@@ -88,7 +97,7 @@ const AdminOverviewPage = async () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Overview</CardTitle>
+            <CardTitle>{t('Overview')}</CardTitle>
           </CardHeader>
           <CardContent className="pl-2">
             <Charts
@@ -100,16 +109,16 @@ const AdminOverviewPage = async () => {
         </Card>
         <Card className="col-span-3">
           <CardHeader>
-            <CardTitle>Recent Sales</CardTitle>
+            <CardTitle>{t('Recent_Sales')}</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>BUYER</TableHead>
-                  <TableHead>DATE</TableHead>
-                  <TableHead>TOTAL</TableHead>
-                  <TableHead>ACTIONS</TableHead>
+                  <TableHead>{t('BUYER')}</TableHead>
+                  <TableHead>{t('DATE')}</TableHead>
+                  <TableHead>{t('TOTAL')}</TableHead>
+                  <TableHead>{t('ACTIONS')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -126,7 +135,7 @@ const AdminOverviewPage = async () => {
                     </TableCell>
                     <TableCell>
                       <Link href={`/order/${order.id}`}>
-                        <span className="px-2">Details</span>
+                        <span className="px-2">{t('Details')}</span>
                       </Link>
                     </TableCell>
                   </TableRow>

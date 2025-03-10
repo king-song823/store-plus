@@ -26,6 +26,7 @@ import { Card, CardContent } from '@/app/[locale]/components/ui/card';
 import { X } from 'lucide-react';
 import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 // import { Checkbox } from '@/components/ui/checkbox';
 
 const ProductForm = ({
@@ -37,13 +38,14 @@ const ProductForm = ({
   product?: Product;
   productId?: string;
 }) => {
+  const t = useTranslations('Admin');
   const getSchema = (type: string) => {
-    return type === 'Update' ? updateProductSchema : insertProductSchema;
+    return type === t('Update') ? updateProductSchema : insertProductSchema;
   };
   const form = useForm<z.infer<ReturnType<typeof getSchema>>>({
     resolver: zodResolver(getSchema(type)),
     defaultValues:
-      product && type === 'Update' ? product : productDefaultValues,
+      product && type === t('Update') ? product : productDefaultValues,
   });
 
   const files = form.watch('files');
@@ -106,9 +108,9 @@ const ProductForm = ({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>Name</FormLabel>
+                <FormLabel>{t('Product_Name')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter product name" {...field} />
+                  <Input placeholder={t('Input_Placeholder')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -127,16 +129,16 @@ const ProductForm = ({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>Slug</FormLabel>
+                <FormLabel>{t('Slug')}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
-                      placeholder="Enter product slug"
+                      placeholder={t('Input_Placeholder')}
                       {...field}
-                      className="pl-8"
                     ></Input>
                     <Button
                       type="button"
+                      disabled={!form.getValues('name')}
                       className="bg-gray-500 text-white px-4 py-1 mt-2 hover:bg-gray-600"
                       onClick={() => {
                         form.setValue(
@@ -145,7 +147,7 @@ const ProductForm = ({
                         );
                       }}
                     >
-                      Generate
+                      {t('Generate')}
                     </Button>
                   </div>
                 </FormControl>
@@ -168,9 +170,12 @@ const ProductForm = ({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>Category</FormLabel>
+                <FormLabel>{t('Category')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter a category" {...field}></Input>
+                  <Input
+                    placeholder={t('Input_Placeholder')}
+                    {...field}
+                  ></Input>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -190,9 +195,9 @@ const ProductForm = ({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>Brand</FormLabel>
+                <FormLabel>{t('Brand')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter product brand" {...field} />
+                  <Input placeholder={t('Input_Placeholder')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -213,9 +218,9 @@ const ProductForm = ({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>Price</FormLabel>
+                <FormLabel>{t('Price')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter product price" {...field} />
+                  <Input placeholder={t('Input_Placeholder')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -234,11 +239,11 @@ const ProductForm = ({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>Stock</FormLabel>
+                <FormLabel>{t('STOCK')}</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
-                    placeholder="Enter product stock"
+                    placeholder={t('Input_Placeholder')}
                     {...field}
                   />
                 </FormControl>
@@ -254,7 +259,7 @@ const ProductForm = ({
             name="files"
             render={() => (
               <FormItem className="w-full">
-                <FormLabel>Files</FormLabel>
+                <FormLabel>{t('Files')}</FormLabel>
                 <Card>
                   <CardContent className="space-y-2 mt-2 min-h-48">
                     <div className="flex-start space-x-2">
@@ -314,7 +319,7 @@ const ProductForm = ({
             name="images"
             render={() => (
               <FormItem className="w-full">
-                <FormLabel>Images</FormLabel>
+                <FormLabel>{t('Images')}</FormLabel>
                 <Card>
                   <CardContent className="space-y-2 mt-2 min-h-48">
                     <div className="flex-start space-x-2">
@@ -382,10 +387,10 @@ const ProductForm = ({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>Description</FormLabel>
+                <FormLabel>{t('Description')}</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Enter product description"
+                    placeholder={t('Input_Placeholder')}
                     className="resize-none"
                     {...field}
                   />
@@ -402,7 +407,9 @@ const ProductForm = ({
             disabled={form.formState.isSubmitting}
             className="button col-span-2 w-full"
           >
-            {form.formState.isSubmitting ? 'Submitting' : `${type} Product`}
+            {form.formState.isSubmitting
+              ? t('Submitting_Loading')
+              : `${type} ${t('Products')}`}
           </Button>
         </div>
       </form>

@@ -10,6 +10,7 @@ import { shippingAddressDefaultValues } from '@/lib/constants';
 import { toast } from '@/hooks/use-toast';
 import { useTransition } from 'react';
 import { updateUserAddress } from '@/lib/actions/user.actions';
+import { useRouter } from '@/i18n/navigation';
 import {
   Form,
   FormControl,
@@ -21,7 +22,7 @@ import {
 import { Input } from '@/app/[locale]/components/ui/input';
 import { Button } from '@/app/[locale]/components/ui/button';
 import { ArrowRight, Loader } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 const ShippingAddressForm = ({
   address,
@@ -35,6 +36,8 @@ const ShippingAddressForm = ({
     defaultValues: address || shippingAddressDefaultValues,
   });
 
+  const c = useTranslations('Common');
+
   const onSubmit: SubmitHandler<z.infer<typeof shippingAddressSchema>> = (
     values
   ) => {
@@ -47,16 +50,14 @@ const ShippingAddressForm = ({
         });
         return;
       }
-      router.push('/payment-method');
+      router.push(`/payment-method`);
     });
   };
   return (
     <>
       <div className="max-w-md mx-auto space-y-4">
-        <h1 className="h2-bold mt-4">Shipping Address</h1>
-        <p className="text-sm text-muted-foreground">
-          Please enter thre address that you want to ship to
-        </p>
+        <h1 className="h2-bold mt-4">{c('Shipping_Address')}</h1>
+        <p className="text-sm text-muted-foreground">{c('Enter_Address')}</p>
         <Form {...form}>
           <form
             method="post"
@@ -76,9 +77,12 @@ const ShippingAddressForm = ({
                   >;
                 }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Full Name</FormLabel>
+                    <FormLabel>{c('Full_Name')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter full name" {...field}></Input>
+                      <Input
+                        placeholder={c('Input_Placeholder')}
+                        {...field}
+                      ></Input>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -98,9 +102,12 @@ const ShippingAddressForm = ({
                   >;
                 }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Address</FormLabel>
+                    <FormLabel>{c('Street_Address')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter address" {...field}></Input>
+                      <Input
+                        placeholder={c('Input_Placeholder')}
+                        {...field}
+                      ></Input>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -120,9 +127,12 @@ const ShippingAddressForm = ({
                   >;
                 }) => (
                   <FormItem>
-                    <FormLabel>City</FormLabel>
+                    <FormLabel>{c('City')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter a city" {...field}></Input>
+                      <Input
+                        placeholder={c('Input_Placeholder')}
+                        {...field}
+                      ></Input>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -140,9 +150,9 @@ const ShippingAddressForm = ({
                   >;
                 }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Country</FormLabel>
+                    <FormLabel>{c('Country')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter country" {...field} />
+                      <Input placeholder={c('Input_Placeholder')} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -160,9 +170,9 @@ const ShippingAddressForm = ({
                   >;
                 }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Postal Code</FormLabel>
+                    <FormLabel>{c('Postal_Code')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter postal code" {...field} />
+                      <Input placeholder={c('Input_Placeholder')} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -176,7 +186,7 @@ const ShippingAddressForm = ({
                 ) : (
                   <ArrowRight className="w-4 h-4" />
                 )}
-                Continue
+                {c('Continue')}
               </Button>
             </div>
           </form>

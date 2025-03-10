@@ -5,7 +5,6 @@ import type { NextAuthConfig } from 'next-auth';
 
 import { prisma } from '@/db/prisma';
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import { NextResponse } from 'next/server';
 
 export const config = {
   pages: {
@@ -114,22 +113,22 @@ export const config = {
       // Check if user is not authenticated and on a protected path
       if (!auth && protectedPaths.some((p) => p.test(pathname))) return false;
       // Check for cart cookie
-      if (!request.cookies.get('sessionCartId')) {
-        // Generate cart cookied
-        const sessionCartId = crypto.randomUUID();
-        // Clone thre request headers
-        const newRequestHeaders = new Headers(request.headers);
-        // Create a new response and add the new headers
-        const response = NextResponse.next({
-          request: {
-            headers: newRequestHeaders,
-          },
-        });
+      // if (!request.cookies.get('sessionCartId')) {
+      //   // Generate cart cookied
+      //   const sessionCartId = crypto.randomUUID();
+      //   // Clone thre request headers
+      //   const newRequestHeaders = new Headers(request.headers);
+      //   // Create a new response and add the new headers
+      //   const response = NextResponse.next({
+      //     request: {
+      //       headers: newRequestHeaders,
+      //     },
+      //   });
 
-        // Set the newly genarated sessionCartId in the response cookie
-        response.cookies.set('sessionCartId', sessionCartId);
-        return response;
-      }
+      //   // Set the newly genarated sessionCartId in the response cookie
+      //   response.cookies.set('sessionCartId', sessionCartId);
+      //   return response;
+      // }
       return true;
     },
   },

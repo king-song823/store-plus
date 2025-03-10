@@ -2,7 +2,7 @@
 
 import { CartItem } from '@/types';
 import { converToPlainObject, formatError, round2 } from '../utils';
-import { cookies } from 'next/headers';
+// import { cookies } from 'next/headers';
 import { auth } from '@/auth';
 import { prisma } from '@/db/prisma';
 import { cartItemSchema, insertCartSchema } from '../validator';
@@ -28,9 +28,6 @@ const calcPrice = (items: CartItem[]) => {
 
 export async function addItemToCart(data: CartItem) {
   try {
-    // Check for session car cookie
-    const sessionCartId = (await cookies()).get('sessionCartId')?.value;
-    if (!sessionCartId) throw new Error('Cart Session not found');
     // Get session and user ID
     const session = await auth();
     const userId = session?.user?.id ? session.user.id : undefined;
@@ -51,7 +48,6 @@ export async function addItemToCart(data: CartItem) {
       const newCart = insertCartSchema.parse({
         userId: userId || null,
         items: [item],
-        sessionCartId: sessionCartId,
         ...calcPrice([item]),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }) as any;
@@ -113,15 +109,14 @@ export async function addItemToCart(data: CartItem) {
 // Get user cart from database
 export async function getMyCart() {
   // Check for cart cookie
-  const sessionCartId = (await cookies()).get('sessionCartId')?.value;
-  if (!sessionCartId) throw new Error('Cart session not found');
+  // const sessionCartId = (await cookies()).get('sessionCartId')?.value;
 
   // Get session and user ID
   const session = await auth();
   const userId = session?.user?.id ? (session.user.id as string) : undefined;
   // Get user cart from database
   const cart = await prisma.cart.findFirst({
-    where: userId ? { userId: userId } : { sessionCartId: sessionCartId },
+    where: { userId: userId },
   });
 
   if (!cart) return undefined;
@@ -140,10 +135,6 @@ export async function getMyCart() {
 // Remove item from cart in database
 export async function removeItemFromCart(productId: string) {
   try {
-    // Check sessionCartId
-    const sessionCartId = (await cookies()).get('sessionCartId')?.value;
-    if (!sessionCartId) throw new Error('Cart Session not found');
-
     // Check Product
     const product = await prisma.product.findFirst({
       where: {
