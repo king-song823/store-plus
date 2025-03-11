@@ -6,10 +6,13 @@ import {
 import { Link } from '@/i18n/navigation';
 import Image from 'next/image';
 import ProductPrice from '@/app/[locale]/components/shared/product/product-price';
-import { Product } from '@/types';
+// import { Product } from '@/types';
 import Rating from './rating';
+import { getTranslations } from 'next-intl/server';
 
-const ProductCard = ({ product }: { product: Product }) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ProductCard = async ({ product }: { product: any }) => {
+  const c = await getTranslations('Common');
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="pt-8 items-center">
@@ -34,7 +37,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           {product.stock > 0 ? (
             <ProductPrice value={Number(product.price)} />
           ) : (
-            <p className="text-destructive">Out of Stock</p>
+            <p className="text-destructive">{c('Out_Of_Stock')}</p>
           )}
         </div>
       </CardContent>

@@ -5,37 +5,36 @@ import {
   getAllCategories,
 } from '@/lib/actions/product.actions';
 import { Link } from '@/i18n/navigation';
+import { getTranslations } from 'next-intl/server';
 
 const prices = [
   {
-    name: '$1 to $50',
+    name: '¥1 - ¥50',
     value: '1-50',
   },
   {
-    name: '$51 to $100',
+    name: '¥51 - ¥100',
     value: '51-100',
   },
   {
-    name: '$101 to $200',
+    name: '¥101 - ¥200',
     value: '101-200',
   },
   {
-    name: '$201 to $500',
+    name: '¥201 - ¥500',
     value: '201-500',
   },
   {
-    name: '$501 to $1000',
+    name: '¥501 - ¥1000',
     value: '501-1000',
   },
   {
-    name: 'above $1000',
-    value: '1000-1000000000',
+    name: '¥1000+',
+    value: '1000-99999999',
   },
 ];
 
-const ratings = [4, 3, 2, 1];
-
-const sortOrders = ['newest', 'lowest', 'highest', 'rating'];
+const ratings = [5, 4, 3, 2, 1];
 
 export async function generateMetadata(props: {
   searchParams: Promise<{
@@ -51,6 +50,8 @@ export async function generateMetadata(props: {
     price = 'all',
     rating = 'all',
   } = await props.searchParams;
+  const c = await getTranslations('Common');
+  const a = await getTranslations('Admin');
 
   const isQuerySet = q && q !== 'all' && q.trim() !== '';
   const isCategorySet =
@@ -61,14 +62,14 @@ export async function generateMetadata(props: {
   if (isQuerySet || isCategorySet || isPriceSet || isRatingSet) {
     return {
       title: `
-      Search ${isQuerySet ? q : ''} 
-      ${isCategorySet ? `: Category ${category}` : ''}
-      ${isPriceSet ? `: Price ${price}` : ''}
-      ${isRatingSet ? `: Rating ${rating}` : ''}`,
+      ${c('Search')} ${isQuerySet ? q : ''} 
+      ${isCategorySet ? `: ${a('CATEGORY')} ${category}` : ''}
+      ${isPriceSet ? `: ${a('Price')} ${price}` : ''}
+      ${isRatingSet ? `:${a('RATING')} ${rating}` : ''}`,
     };
   } else {
     return {
-      title: 'Search Products',
+      title: c('Search_Products'),
     };
   }
 }
@@ -93,7 +94,7 @@ const SearchPage = async (props: {
   } = await props.searchParams;
 
   // Construct filter url
-  const getFilterUrl = ({
+  const getFilterUrl = async ({
     c,
     p,
     s,
@@ -114,7 +115,7 @@ const SearchPage = async (props: {
     if (r) params.rating = r;
     if (pg) params.page = pg;
 
-    return `/search?${new URLSearchParams(params).toString()}`;
+    return `/search?${new URLSearchParams(params).toString()}` as string;
   };
 
   const products = await getAllProducts({
@@ -127,12 +128,21 @@ const SearchPage = async (props: {
   });
 
   const categories = await getAllCategories();
+  const c = await getTranslations('Common');
+  const a = await getTranslations('Admin');
+
+  const sortOrders = [
+    { value: 'newest', label: c('Newest') },
+    { value: 'lowest', label: c('Lowest') },
+    { value: 'highest', label: c('Highest') },
+    { value: 'rating', label: c('Rating') },
+  ];
 
   return (
     <div className="grid md:grid-cols-5 md:gap-5">
       <div className="filter-links">
         {/* Category Links */}
-        <div className="text-xl mb-2 mt-3">Department</div>
+        <div className="text-xl mb-2 mt-3">{c('Department')}</div>
         <div>
           <ul className="space-y-1">
             <li>
@@ -140,16 +150,16 @@ const SearchPage = async (props: {
                 className={`${
                   (category === 'all' || category === '') && 'font-bold'
                 }`}
-                href={getFilterUrl({ c: 'all' })}
+                href={await getFilterUrl({ c: 'all' })}
               >
-                All
+                {c('All')}
               </Link>
             </li>
-            {categories.map((x) => (
+            {categories.map(async (x) => (
               <li key={x.category}>
                 <Link
                   className={`${category === x.category && 'font-bold'}`}
-                  href={getFilterUrl({ c: x.category })}
+                  href={await getFilterUrl({ c: x.category })}
                 >
                   {x.category}
                 </Link>
@@ -158,22 +168,22 @@ const SearchPage = async (props: {
           </ul>
         </div>
         {/* Price Links */}
-        <div className="text-xl mb-2 mt-8">Price</div>
+        <div className="text-xl mb-2 mt-8">{c('Price')}</div>
         <div>
           <ul className="space-y-1">
             <li>
               <Link
                 className={`${price === 'all' && 'font-bold'}`}
-                href={getFilterUrl({ p: 'all' })}
+                href={await getFilterUrl({ p: 'all' })}
               >
-                All
+                {c('All')}
               </Link>
             </li>
-            {prices.map((p) => (
+            {prices.map(async (p) => (
               <li key={p.value}>
                 <Link
                   className={`${price === p.value && 'font-bold'}`}
-                  href={getFilterUrl({ p: p.value })}
+                  href={await getFilterUrl({ p: p.value })}
                 >
                   {p.name}
                 </Link>
@@ -182,24 +192,24 @@ const SearchPage = async (props: {
           </ul>
         </div>
         {/* Rating Links */}
-        <div className="text-xl mb-2 mt-8">Customer Ratings</div>
+        <div className="text-xl mb-2 mt-8">{c('Customer_Ratings')}</div>
         <div>
           <ul className="space-y-1">
             <li>
               <Link
                 className={`${rating === 'all' && 'font-bold'}`}
-                href={getFilterUrl({ r: 'all' })}
+                href={await getFilterUrl({ r: 'all' })}
               >
-                All
+                {c('All')}
               </Link>
             </li>
-            {ratings.map((r) => (
+            {ratings.map(async (r) => (
               <li key={r}>
                 <Link
                   className={`${rating === r.toString() && 'font-bold'}`}
-                  href={getFilterUrl({ r: `${r}` })}
+                  href={await getFilterUrl({ r: `${r}` })}
                 >
-                  {`${r} stars & up`}
+                  {`${r} ${c('Stars_Up')}`}
                 </Link>
               </li>
             ))}
@@ -209,35 +219,38 @@ const SearchPage = async (props: {
       <div className="md:col-span-4 space-y-4">
         <div className="flex-between flex-col md:flex-row my-4">
           <div className="flex items-center">
-            {q !== 'all' && q !== '' && 'Query: ' + q}
-            {category !== 'all' && category !== '' && 'Category: ' + category}
-            {price !== 'all' && ' Price: ' + price}
-            {rating !== 'all' && ' Rating: ' + rating + ' stars & up'}
+            {q !== 'all' && q !== '' && `${c('Search')}: ` + q}
+            {category !== 'all' &&
+              category !== '' &&
+              ` ${a('CATEGORY')}: ` + category}
+            {price !== 'all' && ` ${a('Price')}: ` + price}
+            {rating !== 'all' &&
+              ` ${a('RATING')}: ` + rating + ` ${c('Stars_Up')}`}
             &nbsp;
             {(q !== 'all' && q !== '') ||
             (category !== 'all' && category !== '') ||
             rating !== 'all' ||
             price !== 'all' ? (
               <Button variant={'link'} asChild>
-                <Link href="/search">Clear</Link>
+                <Link href={`/search`}>{c('Clear')}</Link>
               </Button>
             ) : null}
           </div>
           <div>
-            Sort by{' '}
-            {sortOrders.map((s) => (
+            {c('Sort_By')}{' '}
+            {sortOrders.map(async (s) => (
               <Link
-                key={s}
-                className={`mx-2 ${sort == s && 'font-bold'}`}
-                href={getFilterUrl({ s })}
+                key={s.value}
+                className={`mx-2 ${sort == s.value && 'font-bold'}`}
+                href={await getFilterUrl({ s: s.value })}
               >
-                {s}
+                {s.label}
               </Link>
             ))}
           </div>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {products.data.length === 0 && <div>No products found</div>}
+          {products.data.length === 0 && <div>{c('No_Products_Found')}</div>}
           {products.data.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

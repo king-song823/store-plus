@@ -9,12 +9,14 @@ import {
 import { getAllCategories } from '@/lib/actions/product.actions';
 import { Button } from '@/app/[locale]/components/ui/button';
 import { MenuIcon } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
 import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
+import { cookies } from 'next/headers';
 
 const CategoriesDrawer = async () => {
   const categories = await getAllCategories();
   const t = await getTranslations('Common');
+  const locale = (await cookies()).get('locale')?.value;
 
   return (
     <Drawer direction="left">
@@ -34,11 +36,13 @@ const CategoriesDrawer = async () => {
                 key={x.category}
                 asChild
               >
-                <DrawerClose asChild>
-                  <Link href={`/search?category=${x.category}`}>
-                    {x.category} ({x._count})
-                  </Link>
-                </DrawerClose>
+                <div>
+                  <DrawerClose asChild>
+                    <Link href={`/${locale}/search?category=${x.category}`}>
+                      {x.category} ({x._count})
+                    </Link>
+                  </DrawerClose>
+                </div>
               </Button>
             ))}
           </div>

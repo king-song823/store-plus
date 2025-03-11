@@ -10,13 +10,15 @@ import {
 import { getAllCategories } from '@/lib/actions/product.actions';
 import { SearchIcon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import { cookies } from 'next/headers';
 
 const Search = async () => {
   const categorise = await getAllCategories();
   const t = await getTranslations('Common');
+  const locale = (await cookies()).get('locale')?.value;
 
   return (
-    <form action="/search" method="GET">
+    <form action={`/${locale}/search`} method="GET">
       <div className="flex w-full max-w-sm item-center space-x-2">
         <Select name="category">
           <SelectTrigger className="w-[180px]">
