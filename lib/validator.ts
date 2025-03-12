@@ -9,17 +9,40 @@ const currency = z
     'Price must have exactly two decimal places (e.g., 49.99)'
   );
 
+const imageSchema = z.object({
+  name: z.string(),
+  url: z.string(),
+});
+
+import i18JsonZh from '../messages/zh.json';
+
 // Schema for inserting a product
 export const insertProductSchema = z.object({
-  name: z.string().min(3, 'Name must be at least 3 characters'),
-  slug: z.string().min(3, 'Slug must be at least 3 characters'),
-  category: z.string().min(3, 'Category must be at least 3 characters'),
-  brand: z.string().min(3, 'Brand must be at least 3 characters'),
-  description: z.string().min(3, 'Description must be at least 3 characters'),
+  name: z
+    .string()
+    .min(2, i18JsonZh['Common']['Name_Must_Be_At_Least_3_Characters']),
+  slug: z
+    .string()
+    .min(2, i18JsonZh['Common']['Slug_Must_Be_At_Least_3_Characters']),
+  category: z
+    .string()
+    .min(2, i18JsonZh['Common']['Category_Must_Be_At_Least_3_Characters']),
+  brand: z
+    .string()
+    .min(2, i18JsonZh['Common']['Brand_Must_Be_At_Least_3_Characters']),
+  description: z
+    .string()
+    .min(2, i18JsonZh['Common']['Description_Must_Be_At_Least_3_Characters']),
   stock: z.coerce.number(),
-  images: z.array(z.string().min(1, 'Product must have at least one image')),
-  isFeatured: z.boolean(),
-  banner: z.string().nullable(),
+  files: z
+    .array(imageSchema)
+    .min(1, i18JsonZh['Common']['Files_Must_Have_At_Least_One_File'])
+    .default([]),
+  images: z.array(
+    z
+      .string()
+      .min(1, i18JsonZh['Common']['Images_Must_Have_At_Least_One_Image'])
+  ),
   price: currency,
 });
 
@@ -27,33 +50,48 @@ export const insertProductSchema = z.object({
 export const signInFormSchema = z.object({
   email: z
     .string()
-    .email('Invalid email address')
-    .min(3, 'Email must be at least 3 characters'),
-  password: z.string().min(3, 'assword must be at least 3 characters'),
+    .email(i18JsonZh['Common']['Invalid_Email_Address'])
+    .min(3, i18JsonZh['Common']['Email_Must_Be_At_Least_3_Characters']),
+  password: z
+    .string()
+    .min(3, i18JsonZh['Common']['Password_Must_Be_At_Least_3_Characters']),
 });
 
 // Schema for signing up a user
 export const signUpFormSchema = z.object({
-  name: z.string().min(3, 'Name must be at least 3 characters'),
-  email: z.string().email().min(3, 'Email must be at least 3 characters'),
-  password: z.string().min(3, 'Password must be at least 3 characters'),
+  name: z
+    .string()
+    .min(3, i18JsonZh['Common']['Name_Must_Be_At_Least_3_Characters']),
+  email: z
+    .string()
+    .email(i18JsonZh['Common']['Invalid_Email_Address'])
+    .min(3, i18JsonZh['Common']['Email_Must_Be_At_Least_3_Characters']),
+  password: z
+    .string()
+    .min(3, i18JsonZh['Common']['Password_Must_Be_At_Least_3_Characters']),
   confirmPassword: z
     .string()
-    .min(3, 'Confirm password must be at least 3 characters')
+    .min(
+      3,
+      i18JsonZh['Common']['Confirm_Password_Must_Be_At_Least_3_Characters']
+    )
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .refine((data: any) => data.password === data.confirmPassword, {
-      message: "Passwords don't match",
+      message: i18JsonZh['Common']['Passwords_Dont_Match'],
       path: ['confirmPassword'],
     }),
 });
 
 // Schema for Cart
 export const cartItemSchema = z.object({
-  productId: z.string().min(1, 'Product is required'),
-  name: z.string().min(1, 'Name is required'),
-  slug: z.string().min(1, 'Slug is required'),
-  qty: z.number().int().nonnegative('Quantity must be a positive number'),
-  image: z.string().min(1, 'Image is required'),
+  productId: z.string().min(1, i18JsonZh['Common']['Product_Is_Required']),
+  name: z.string().min(1, i18JsonZh['Common']['Name_Is_Required']),
+  slug: z.string().min(1, i18JsonZh['Common']['Slug_Is_Required']),
+  qty: z
+    .number()
+    .int()
+    .nonnegative(i18JsonZh['Common']['Quantity_Must_Be_A_Positive_Number']),
+  image: z.string().min(1, i18JsonZh['Common']['Image_Is_Required']),
   price: currency,
 });
 
@@ -64,17 +102,26 @@ export const insertCartSchema = z.object({
   totalPrice: currency,
   shippingPrice: currency,
   taxPrice: currency,
-  sessionCartId: z.string().min(1, 'Session cart id is required'),
   userId: z.string().optional().nullable(),
 });
 
 // Schema for shipping address
 export const shippingAddressSchema = z.object({
-  fullName: z.string().min(3, 'Name must be at least 3 characters'),
-  streetAddress: z.string().min(3, 'Address must be at least 3 characters'),
-  city: z.string().min(2, 'city must be at least 3 characters'),
-  postalCode: z.string().min(3, 'Postal code must be at least 3 characters'),
-  country: z.string().min(2, 'Country must be at least 3 characters'),
+  fullName: z
+    .string()
+    .min(3, i18JsonZh['Common']['Name_Must_Be_At_Least_3_Characters']),
+  streetAddress: z
+    .string()
+    .min(3, i18JsonZh['Common']['Address_Must_Be_At_Least_3_Characters']),
+  city: z
+    .string()
+    .min(2, i18JsonZh['Common']['City_Must_Be_At_Least_3_Characters']),
+  postalCode: z
+    .string()
+    .min(3, i18JsonZh['Common']['Postal_Code_Must_Be_At_Least_3_Characters']),
+  country: z
+    .string()
+    .min(2, i18JsonZh['Common']['Country_Must_Be_At_Least_3_Characters']),
   lat: z.number().optional(),
   lng: z.number().optional(),
 });
@@ -82,22 +129,22 @@ export const shippingAddressSchema = z.object({
 // Schema for paymemtMethods
 export const paymentMethodSchema = z
   .object({
-    type: z.string().min(1, 'Payment method is required'),
+    type: z.string().min(1, i18JsonZh['Common']['Payment_Method_Is_Required']),
   })
   .refine((data) => PAYMENT_METHODS.includes(data.type), {
     path: ['type'],
-    message: 'Invalid payment method',
+    message: i18JsonZh['Common']['Invalid_Payment_Method'],
   });
 
 // Insert order schema
 export const insertOrderSchema = z.object({
-  userId: z.string().min(1, 'User is required'),
+  userId: z.string().min(1, i18JsonZh['Common']['User_Is_Required']),
   itemsPrice: currency,
   shippingPrice: currency,
   taxPrice: currency,
   totalPrice: currency,
   paymentMethod: z.string().refine((data) => PAYMENT_METHODS.includes(data), {
-    message: 'Invalid payment method',
+    message: i18JsonZh['Common']['Invalid_Payment_Method'],
   }),
   shippingAddress: shippingAddressSchema,
 });
@@ -121,19 +168,22 @@ export const paymentResultSchema = z.object({
 
 // Update Profile Schema
 export const updateProfileSchema = z.object({
-  name: z.string().min(3, 'Name must be at least 3 characters'),
-  email: z.string().min(3, 'Email must be at least 3 characters'),
+  name: z
+    .string()
+    .min(3, i18JsonZh['Common']['Name_Must_Be_At_Least_3_Characters']),
+  email: z
+    .string()
+    .min(3, i18JsonZh['Common']['Email_Must_Be_At_Least_3_Characters']),
 });
-
 // Schema for updating a product
 export const updateProductSchema = insertProductSchema.extend({
-  id: z.string().min(1, 'Id is required'),
+  id: z.string().min(1, i18JsonZh['Common']['Id_Is_Required']),
 });
 
 // Update User Schema
 export const updateUserSchema = updateProfileSchema.extend({
-  id: z.string().min(1, 'Id is required'),
-  role: z.string().min(1, 'Role is required'),
+  id: z.string().min(1, i18JsonZh['Common']['Id_Is_Required']),
+  role: z.string().min(1, i18JsonZh['Common']['Role_Is_Required']),
 });
 
 // Schema for a review
@@ -141,10 +191,14 @@ export const insertReviewSchema = z.object({
   rating: z.coerce
     .number()
     .int()
-    .min(1, 'Rating must be at least 1')
-    .max(5, 'Rating must be at most 5'),
-  title: z.string().min(2, 'Title must be at least 3 characters'),
-  description: z.string().min(2, 'Description must be at least 3 characters'),
-  productId: z.string().min(1, 'Product is required'),
-  userId: z.string().min(1, 'User is required'),
+    .min(1, i18JsonZh['Common']['Rating_Must_Be_At_Least_1'])
+    .max(5, i18JsonZh['Common']['Rating_Must_Be_At_Most_5']),
+  title: z
+    .string()
+    .min(2, i18JsonZh['Common']['Title_Must_Be_At_Least_3_Characters']),
+  description: z
+    .string()
+    .min(2, i18JsonZh['Common']['Description_Must_Be_At_Least_3_Characters']),
+  productId: z.string().min(1, i18JsonZh['Common']['Product_Is_Required']),
+  userId: z.string().min(1, i18JsonZh['Common']['User_Is_Required']),
 });

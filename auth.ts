@@ -5,12 +5,11 @@ import type { NextAuthConfig } from 'next-auth';
 
 import { prisma } from '@/db/prisma';
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import { NextResponse } from 'next/server';
 
 export const config = {
   pages: {
-    signIn: '/sign-in',
-    error: '/sign-in',
+    signIn: '/zh/sign-in',
+    error: '/zh/sign-in',
   },
   session: {
     strategy: 'jwt',
@@ -98,7 +97,6 @@ export const config = {
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     authorized({ request }: any) {
-      // Array of regex patterns of protected paths
       const protectedPaths = [
         /\/shipping-address/,
         /\/payment-method/,
@@ -110,26 +108,13 @@ export const config = {
       ];
       // Get pathname from the req URL object
       const { pathname } = request.nextUrl;
-
+      console.log(
+        'hahahahh ',
+        !auth,
+        protectedPaths.some((p) => p.test(pathname))
+      );
       // Check if user is not authenticated and on a protected path
       if (!auth && protectedPaths.some((p) => p.test(pathname))) return false;
-      // Check for cart cookie
-      if (!request.cookies.get('sessionCartId')) {
-        // Generate cart cookied
-        const sessionCartId = crypto.randomUUID();
-        // Clone thre request headers
-        const newRequestHeaders = new Headers(request.headers);
-        // Create a new response and add the new headers
-        const response = NextResponse.next({
-          request: {
-            headers: newRequestHeaders,
-          },
-        });
-
-        // Set the newly genarated sessionCartId in the response cookie
-        response.cookies.set('sessionCartId', sessionCartId);
-        return response;
-      }
       return true;
     },
   },
