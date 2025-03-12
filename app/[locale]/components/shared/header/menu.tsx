@@ -11,6 +11,7 @@ import {
 import ModeToggle from '../model-toggle';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
+import IntelModeToggle from '../intel-mode-toggle';
 const Menu = async () => {
   const t = await getTranslations('Common');
   return (
@@ -18,6 +19,7 @@ const Menu = async () => {
       <div className="flex justify-end gap-3">
         <nav className="md:flex hidden w-full max-w-xs gap-1">
           <ModeToggle />
+          <IntelModeToggle />
           <Button asChild variant="ghost">
             <Link href="/cart" locale="zh">
               <ShoppingCart />
@@ -37,6 +39,8 @@ const Menu = async () => {
               </div>
               <SheetTitle>{t('Menu')}</SheetTitle>
               <ModeToggle />
+              <IntelModeToggle />
+
               <Button asChild variant="ghost">
                 <Link href="/cart">
                   <ShoppingCart />
@@ -44,12 +48,6 @@ const Menu = async () => {
                 </Link>
               </Button>
               <UserButton />
-              {/* <Button asChild>
-                <Link href="/sign-in">
-                  <UserIcon />
-                  Sign In
-                </Link>
-              </Button> */}
             </SheetContent>
           </Sheet>
         </nav>

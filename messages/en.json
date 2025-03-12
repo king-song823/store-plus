@@ -9,6 +9,8 @@
     "Error_Page": "Page Error"
   },
   "Common": {
+    "English": "English",
+    "Chinese": "Chinese",
     "Money_Back_Guarantee": "Money Back Guarantee",
     "Carts": "Carts",
     "Cart_Is_Empty": "Your cart is empty.",
