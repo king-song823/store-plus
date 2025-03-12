@@ -204,6 +204,12 @@
     "Write_Review": "写评价",
     "Share_Your_Thoughts_With_Other_Customers": "和其他顾客分享你的想法"
   },
+  "Not_Found": {
+    "Title": "未找到页面",
+    "Message": "无法找到请求的页面",
+    "Button": "返回首页",
+    "Error_Page": "页面错误"
+  },
   "Admin": {
     "Total_Revenue": "总收入",
     "Dashboard": "仪表板",
@@ -219,6 +225,7 @@
     "TOTAL": "总数",
     "ACTIONS": "操作",
     "Details": "详情",
+
     "Customers": "顾客",
     "Create_Product": "创建产品",
     "Remove_Filter": "清除筛选",

@@ -2,6 +2,12 @@
   "HomePage": {
     "NewestArrivals": "Newest Arrivals"
   },
+  "Not_Found": {
+    "Title": "Page Not Found",
+    "Message": "Could not find the requested page",
+    "Button": "Back to Home",
+    "Error_Page": "Page Error"
+  },
   "Common": {
     "Money_Back_Guarantee": "Money Back Guarantee",
     "Carts": "Carts",
