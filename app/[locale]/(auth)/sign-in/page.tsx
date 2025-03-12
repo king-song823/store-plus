@@ -1,4 +1,3 @@
-import { Metadata } from 'next';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import {
@@ -14,9 +13,12 @@ import Image from 'next/image';
 import CredentialsSignInForm from './credentials-signin-form';
 import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'Sign In',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('Common');
+  return {
+    title: t('Sign_In'),
+  };
+}
 const SignIn = async (props: {
   searchParams: Promise<{ callbackUrl: string }>;
 }) => {
@@ -37,6 +39,7 @@ const SignIn = async (props: {
               src="/images/logo.webp"
               width={100}
               height={100}
+              className="rounded"
               alt={`${APP_NAME} logo`}
             />
           </Link>

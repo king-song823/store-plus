@@ -71,36 +71,39 @@ export function formatId(id: string) {
 
 export const formatDateTime = (dateString: Date) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
-    month: 'short', // abbreviated month name (e.g., 'Oct')
-    year: 'numeric', // abbreviated month name (e.g., 'Oct')
-    day: 'numeric', // numeric day of the month (e.g., '25')
-    hour: 'numeric', // numeric hour (e.g., '8')
-    minute: 'numeric', // numeric minute (e.g., '30')
-    hour12: true, // use 12-hour clock (true) or 24-hour clock (false)
+    month: 'short', // 缩写的月份名称（例如，'10月'）
+    year: 'numeric', // 数字年份（例如，'2023'）
+    day: 'numeric', // 数字的日期（例如，'25'）
+    hour: 'numeric', // 数字小时（例如，'8'）
+    minute: 'numeric', // 数字分钟（例如，'30'）
+    hour12: true, // 使用12小时制（true）还是24小时制（false）
   };
   const dateOptions: Intl.DateTimeFormatOptions = {
-    weekday: 'short', // abbreviated weekday name (e.g., 'Mon')
-    month: 'short', // abbreviated month name (e.g., 'Oct')
-    year: 'numeric', // numeric year (e.g., '2023')
-    day: 'numeric', // numeric day of the month (e.g., '25')
+    weekday: 'short', // 缩写的星期几（例如，'周一'）
+    month: 'short', // 缩写的月份名称（例如，'10月'）
+    year: 'numeric', // 数字年份（例如，'2023'）
+    day: 'numeric', // 数字的日期（例如，'25'）
   };
   const timeOptions: Intl.DateTimeFormatOptions = {
-    hour: 'numeric', // numeric hour (e.g., '8')
-    minute: 'numeric', // numeric minute (e.g., '30')
-    hour12: true, // use 12-hour clock (true) or 24-hour clock (false)
+    hour: 'numeric', // 数字小时（例如，'8'）
+    minute: 'numeric', // 数字分钟（例如，'30'）
+    hour12: true, // 使用12小时制（true）还是24小时制（false）
   };
+
+  // 设置为中国北京时区
   const formattedDateTime: string = new Date(dateString).toLocaleString(
-    'en-US',
-    dateTimeOptions
+    'zh-CN',
+    { ...dateTimeOptions, timeZone: 'Asia/Shanghai' }
   );
-  const formattedDate: string = new Date(dateString).toLocaleString(
-    'en-US',
-    dateOptions
-  );
-  const formattedTime: string = new Date(dateString).toLocaleString(
-    'en-US',
-    timeOptions
-  );
+  const formattedDate: string = new Date(dateString).toLocaleString('zh-CN', {
+    ...dateOptions,
+    timeZone: 'Asia/Shanghai',
+  });
+  const formattedTime: string = new Date(dateString).toLocaleString('zh-CN', {
+    ...timeOptions,
+    timeZone: 'Asia/Shanghai',
+  });
+
   return {
     dateTime: formattedDateTime,
     dateOnly: formattedDate,
@@ -132,7 +135,7 @@ export function formUrlQuery({
 }
 
 //  Format Numbers
-const NUMBER_FORMATTER = new Intl.NumberFormat('en-US');
+const NUMBER_FORMATTER = new Intl.NumberFormat('zh-CN');
 export function formatNumber(number: number) {
   return NUMBER_FORMATTER.format(number);
 }

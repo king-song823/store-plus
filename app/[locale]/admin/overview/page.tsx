@@ -8,7 +8,6 @@ import {
 import { getOrderSummary } from '@/lib/actions/order.action';
 import { formatCurrency, formatDateTime, formatNumber } from '@/lib/utils';
 import { BadgeDollarSign, Barcode, CreditCard, Users } from 'lucide-react';
-import { Metadata } from 'next';
 import {
   Table,
   TableBody,
@@ -22,9 +21,12 @@ import Charts from './charts';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'Admin Dashboard',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('Common');
+  return {
+    title: t('Admin_Dashboard'),
+  };
+}
 
 const AdminOverviewPage = async () => {
   const session = await auth();

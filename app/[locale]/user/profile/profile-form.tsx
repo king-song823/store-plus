@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { updateProfileSchema } from '@/lib/validator';
 import { updateProfile } from '@/lib/actions/user.actions';
+import { useTranslations } from 'next-intl';
 
 const ProfileForm = () => {
   const { data: session, update } = useSession();
@@ -28,6 +29,7 @@ const ProfileForm = () => {
       email: session?.user?.email ?? '',
     },
   });
+  const c = useTranslations('Common');
 
   // Submit form to update profile
   async function onSubmit(values: z.infer<typeof updateProfileSchema>) {
@@ -101,7 +103,9 @@ const ProfileForm = () => {
           disabled={form.formState.isSubmitting}
           className="button col-span-2 w-full"
         >
-          {form.formState.isSubmitting ? 'Submitting...' : 'Update Profile'}
+          {form.formState.isSubmitting
+            ? c('Submitting_Loading')
+            : c('Update_Profile')}
         </Button>
       </form>
     </Form>

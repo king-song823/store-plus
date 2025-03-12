@@ -9,14 +9,12 @@ import {
 } from '@/app/[locale]/components/ui/select';
 import { getAllCategories } from '@/lib/actions/product.actions';
 import { SearchIcon } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
-import { cookies } from 'next/headers';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 const Search = async () => {
   const categorise = await getAllCategories();
   const t = await getTranslations('Common');
-  const locale = (await cookies()).get('locale')?.value;
-
+  const locale = await getLocale();
   return (
     <form action={`/${locale}/search`} method="GET">
       <div className="flex w-full max-w-sm item-center space-x-2">

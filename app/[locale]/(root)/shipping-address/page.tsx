@@ -1,15 +1,18 @@
 import { auth } from '@/auth';
 import { getMyCart } from '@/lib/actions/cart.action';
-import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import ShippingAddressForm from './shipping-address-form';
 import CheckoutSteps from '@/app/[locale]/components/shared/check-steps';
 import { getUserById } from '@/lib/actions/user.actions';
 import { ShippingAddress } from '@/types';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'Shipping Address',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('Common');
+  return {
+    title: t('Shipping_Address'),
+  };
+}
 const ShippingAddressPage = async () => {
   const cart = await getMyCart();
   if (!cart || cart.items.length === 0) redirect('/cart');

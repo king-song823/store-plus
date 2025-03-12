@@ -11,7 +11,7 @@ const CheckoutSteps = async ({ current = 0 }) => {
         c('User_Login'),
         c('Shipping_Address'),
         c('Payment_Method'),
-        c('Place_Order'),
+        c('Orders'),
       ].map((step, index) => (
         <React.Fragment key={step}>
           <div
@@ -22,7 +22,7 @@ const CheckoutSteps = async ({ current = 0 }) => {
           >
             {step}
           </div>
-          {step !== c('Place_Order') && (
+          {step !== c('Orders') && (
             <hr className="w-16 border-t border-gray-300 mx-2" />
           )}
         </React.Fragment>

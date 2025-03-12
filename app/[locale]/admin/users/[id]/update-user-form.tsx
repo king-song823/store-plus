@@ -26,6 +26,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { updateUser } from '@/lib/actions/user.actions';
+import { useTranslations } from 'next-intl';
+
 const updateUserForm = ({
   user,
 }: {
@@ -33,6 +35,7 @@ const updateUserForm = ({
 }) => {
   const router = useRouter();
   const { toast } = useToast();
+  const c = useTranslations('Common'); // 获取翻译
 
   const form = useForm<z.infer<typeof updateUserSchema>>({
     resolver: zodResolver(updateUserSchema),
@@ -88,11 +91,11 @@ const updateUserForm = ({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{c('Email')}</FormLabel>
                 <FormControl>
                   <Input
                     disabled={true}
-                    placeholder="Enter user email"
+                    placeholder={c('Enter_user_email')}
                     {...field}
                   />
                 </FormControl>
@@ -115,9 +118,9 @@ const updateUserForm = ({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>Name</FormLabel>
+                <FormLabel>{c('Name')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter user name" {...field} />
+                  <Input placeholder={c('Enter_user_name')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -138,14 +141,14 @@ const updateUserForm = ({
               >;
             }) => (
               <FormItem className=" items-center">
-                <FormLabel>Role</FormLabel>
+                <FormLabel>{c('Role')}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   value={field.value.toString()}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a role" />
+                      <SelectValue placeholder={c('Select_a_role')} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -167,7 +170,7 @@ const updateUserForm = ({
             className="w-full"
             disabled={form.formState.isSubmitting}
           >
-            {form.formState.isSubmitting ? 'Submitting...' : `Update User `}
+            {form.formState.isSubmitting ? c('Submitting') : c('Update_User')}
           </Button>
         </div>
       </form>

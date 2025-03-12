@@ -6,6 +6,8 @@ import { revalidatePath } from 'next/cache';
 import { insertProductSchema, updateProductSchema } from '../validator';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
+import { Product } from '@/types';
+import { getTranslations } from 'next-intl/server';
 // Get the lastest products
 export async function getLastestProdcuts() {
   const data = await prisma.product.findMany({
@@ -109,11 +111,12 @@ export async function getAllProducts({
 // Delete Product
 export async function deleteProduct(id: string) {
   try {
+    const c = await getTranslations('Common');
     const productExists = await prisma.product.findFirst({
       where: { id },
     });
 
-    if (!productExists) throw new Error('Product not found');
+    if (!productExists) throw new Error(c('Product_Not_Found'));
 
     await prisma.product.delete({ where: { id } });
 
@@ -121,7 +124,7 @@ export async function deleteProduct(id: string) {
 
     return {
       success: true,
-      message: 'Product deleted successfully',
+      message: c('Product_Deleted_Successfully'),
     };
   } catch (error) {
     return { success: false, message: formatError(error) };
@@ -132,14 +135,16 @@ export async function deleteProduct(id: string) {
 export async function createProduct(data: z.infer<typeof insertProductSchema>) {
   try {
     // Validate and create product
+    const c = await getTranslations('Common');
+
     const product = insertProductSchema.parse(data);
     await prisma.product.create({ data: product });
 
-    revalidatePath('/admin/products');
+    revalidatePath('/zh/admin/products');
 
     return {
       success: true,
-      message: 'Product created successfully',
+      message: c('Product_Created_Successfully'),
     };
   } catch (error) {
     return handleError(error);
@@ -150,12 +155,14 @@ export async function createProduct(data: z.infer<typeof insertProductSchema>) {
 export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
   try {
     const params = updateProductSchema.parse(data);
+    const c = await getTranslations('Common');
+
     const product = await prisma.product.findFirst({
       where: {
         id: params.id,
       },
     });
-    if (!product) throw new Error('Product not found');
+    if (!product) throw new Error(c('Product_Not_Found'));
     await prisma.product.update({
       where: {
         id: params.id,
@@ -165,7 +172,7 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
     revalidatePath('/admin/products');
     return {
       success: true,
-      message: 'Product updated successfully',
+      message: c('Product_Updated_Successfully'),
     };
   } catch (error) {
     return handleError(error);
@@ -173,12 +180,14 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
 }
 
 // Get single product by id
-export async function getProductById(productId: string) {
+export async function getProductById(
+  productId: string
+): Promise<Product | null> {
   const data = await prisma.product.findFirst({
     where: { id: productId },
   });
 
-  return converToPlainObject(data);
+  return converToPlainObject(data as unknown as Product);
 }
 
 // Get prodcut categories

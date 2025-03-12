@@ -1,11 +1,14 @@
 import { auth } from '@/auth';
-import { Metadata } from 'next';
 import CheckoutSteps from '@/app/[locale]/components/shared/check-steps';
 import PaymentMethodForm from './payment-method-form';
 import { getUserById } from '@/lib/actions/user.actions';
-export const metadata: Metadata = {
-  title: 'Payment Method',
-};
+import { getTranslations } from 'next-intl/server';
+export async function generateMetadata() {
+  const t = await getTranslations('Common');
+  return {
+    title: t('Payment_Method'),
+  };
+}
 
 const PaymentMthodPage = async () => {
   const session = await auth();

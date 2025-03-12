@@ -68,7 +68,7 @@ const AdminProductsPage = async (props: {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products?.data.map((product) => (
+            {products.data.map((product) => (
               <TableRow key={product.id}>
                 <TableCell>{formatId(product.id)}</TableCell>
                 <TableCell>{product.name}</TableCell>
@@ -80,7 +80,9 @@ const AdminProductsPage = async (props: {
                 <TableCell>{product.rating}</TableCell>
                 <TableCell className="flex gap-1">
                   <Button asChild variant="outline" size="sm">
-                    <Link href={`/admin/products/${product.id}`}>Edit</Link>
+                    <Link href={`/admin/products/${product.id}`}>
+                      {t('Edit')}
+                    </Link>
                   </Button>
                   <DeleteDialog id={product.id} action={deleteProduct} />
                 </TableCell>
@@ -88,7 +90,7 @@ const AdminProductsPage = async (props: {
             ))}
           </TableBody>
         </Table>
-        {products?.totalPages && products.totalPages > 1 && (
+        {products.totalPages > 1 && (
           <Pagination page={page} totalPages={products.totalPages} />
         )}
       </div>

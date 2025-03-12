@@ -12,10 +12,14 @@ import { APP_NAME } from '@/lib/constants';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import SignUpForm from './signup-form';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'Sign Up',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('Common');
+  return {
+    title: t('Sign_Up'),
+  };
+}
 
 const SignUp = async (props: {
   searchParams: Promise<{
@@ -25,6 +29,7 @@ const SignUp = async (props: {
   const searchParams = await props.searchParams;
   const { callbackUrl } = searchParams;
   const session = await auth();
+  const c = await getTranslations('Common');
   if (session) {
     return redirect(callbackUrl ?? '/');
   }
@@ -38,12 +43,13 @@ const SignUp = async (props: {
               src="/images/logo.webp"
               width={100}
               height={100}
+              className="rounded"
               alt={`${APP_NAME} logo`}
             />
           </Link>
-          <CardTitle className="text-center">Create Account</CardTitle>
+          <CardTitle className="text-center">{c('Create_Account')}</CardTitle>
           <CardDescription className="text-center">
-            Enter your information below to create your account
+            {c('Create_Account')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

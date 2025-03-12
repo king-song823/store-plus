@@ -45,7 +45,7 @@ const AddToCart = ({
   const handleAddToCart = () => {
     startTransition(async () => {
       if (!userId) {
-        router.push('/cart');
+        router.push('/sign-in');
         return;
       }
       // addItemCart
@@ -110,7 +110,7 @@ const AddToCart = ({
       ) : (
         <Plus className="w-4 h-4" />
       )}
-      {t('Go_To_Cart')}
+      {t('Add_To_Cart')}
     </Button>
   );
 };

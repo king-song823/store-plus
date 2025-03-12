@@ -11,13 +11,16 @@ import {
   TableRow,
 } from '@/app/[locale]/components/ui/table';
 import { formatId } from '@/lib/utils';
-import { Metadata } from 'next';
 import { Link } from '@/i18n/navigation';
 import { getAllUsers, deleteUser } from '@/lib/actions/user.actions';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'Admin Users',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('Common');
+  return {
+    title: t('Admin_Users'),
+  };
+}
 
 const AdminUserPage = async (props: {
   searchParams: Promise<{

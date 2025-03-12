@@ -20,9 +20,12 @@ import { formatCurrency } from '@/lib/utils';
 import PlaceOrderForm from './place-order-form';
 import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'Place Order',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('Common');
+  return {
+    title: t('Orders'),
+  };
+}
 
 const PlaceOrder = async () => {
   const session = await auth();
@@ -38,7 +41,7 @@ const PlaceOrder = async () => {
   return (
     <>
       <CheckoutSteps current={3} />
-      <h1 className="py-4 text-2xl">{c('Place_Order')}</h1>
+      <h1 className="py-4 text-2xl">{c('Order_Summary')}</h1>
 
       <div className="grid md:grid-cols-3 md:gap-5">
         <div className="overflow-x-auto md:col-span-2 space-y-4">

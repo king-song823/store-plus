@@ -4,10 +4,14 @@ import OrderDetailsTable from './order-detail-table';
 import { Order } from '@/types';
 import { auth } from '@/auth';
 import Stripe from 'stripe';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata = {
-  title: 'Order Details',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('Common');
+  return {
+    title: t('Order_Details'),
+  };
+}
 
 const OrderDetailsPage = async (props: {
   params: Promise<{
@@ -30,7 +34,7 @@ const OrderDetailsPage = async (props: {
     // Create a new payment intent
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(Number(order.totalPrice) * 100),
-      currency: 'USD',
+      currency: 'CNY',
       metadata: { orderId: order.id },
     });
     client_secret = paymentIntent.client_secret;

@@ -12,13 +12,12 @@ import { PAGE_SIZE } from '../constants';
 import { Prisma } from '@prisma/client';
 import { CartItem, PaymentResult, ShippingAddress } from '@/types';
 import { sendPurchaseReceipt } from '@/email';
-import { cookies } from 'next/headers';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 export async function createOrder() {
   try {
     const session = await auth();
-    const locale = (await cookies()).get('locale')?.value;
+    const locale = await getLocale();
     const c = await getTranslations('Common');
     if (!session) throw new Error(c('User_Is_Not_Authenticated'));
 
@@ -162,7 +161,7 @@ export async function createPayPalOrder(orderId: string) {
       // Return the paypal order id
       return {
         success: true,
-        message: c('PayPal order created successfully'),
+        message: c('PayPal_Order_Created_uccessfully'),
         data: res.id,
       };
     } else {
@@ -186,7 +185,7 @@ export async function approvePayPalOrder(
   try {
     // Check order not found
     const c = await getTranslations('Common');
-    const locale = (await cookies()).get('locale')?.value;
+    const locale = await getLocale();
 
     const order = await prisma.order.findFirst({
       where: {
@@ -465,7 +464,7 @@ export async function getAllOrders({
 // Delete Order (Admin)
 export async function deleteOrder(id: string) {
   try {
-    const locale = (await cookies()).get('locale')?.value;
+    const locale = await getLocale();
     const c = await getTranslations('Common');
 
     await prisma.order.delete({
@@ -486,7 +485,7 @@ export async function deleteOrder(id: string) {
 // Update order to paid by COD
 export async function updateOrderToPaidByCOD(orderId: string) {
   try {
-    const locale = (await cookies()).get('locale')?.value;
+    const locale = await getLocale();
     const c = await getTranslations('Common');
     await updateOrderToPaid({ orderId });
     revalidatePath(`/${locale}/order/${orderId}`);
@@ -505,7 +504,7 @@ export async function deliverOrder(orderId: string) {
       },
     });
     const c = await getTranslations('Common');
-    const locale = (await cookies()).get('locale')?.value;
+    const locale = await getLocale();
 
     if (!order) throw new Error(c('User_Not_Found'));
     if (!order.isPaid) throw new Error(c('Order_Not_Created'));

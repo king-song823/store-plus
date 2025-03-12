@@ -1,9 +1,11 @@
-import { Metadata } from 'next';
 import ProductForm from '@/app/[locale]/components/shared/admin/prodcut-form';
 import { getTranslations } from 'next-intl/server';
-export const metadata: Metadata = {
-  title: 'Create product',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('Common');
+  return {
+    title: t('Create_Product'),
+  };
+}
 
 const CreateProductPage = async () => {
   const t = await getTranslations('Admin');
@@ -13,7 +15,7 @@ const CreateProductPage = async () => {
       <h2 className="h2-bold">{t('Create_Product')}</h2>
       <div className="my-8">
         {' '}
-        <ProductForm type={t('Create') as 'Create'} />
+        <ProductForm type={'Create'} />
       </div>
     </>
   );

@@ -20,7 +20,7 @@ import { Button } from '@/app/[locale]/components/ui/button';
 import { Textarea } from '@/app/[locale]/components/ui/textarea';
 import { createProduct, updateProduct } from '@/lib/actions/product.actions';
 import { toast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { UploadButton } from '@/lib/uploadthing';
 import { Card, CardContent } from '@/app/[locale]/components/ui/card';
 import { X } from 'lucide-react';
@@ -40,18 +40,19 @@ const ProductForm = ({
 }) => {
   const t = useTranslations('Admin');
   const getSchema = (type: string) => {
-    return type === t('Update') ? updateProductSchema : insertProductSchema;
+    return type === 'Update' ? updateProductSchema : insertProductSchema;
   };
   const form = useForm<z.infer<ReturnType<typeof getSchema>>>({
     resolver: zodResolver(getSchema(type)),
     defaultValues:
-      product && type === t('Update') ? product : productDefaultValues,
+      product && type === 'Update' ? product : productDefaultValues,
   });
 
   const files = form.watch('files');
   const images = form.watch('images');
 
   const router = useRouter();
+  const a = useTranslations('Admin');
 
   const onSubmit: SubmitHandler<z.infer<typeof insertProductSchema>> = async (
     values
@@ -263,7 +264,7 @@ const ProductForm = ({
                 <Card>
                   <CardContent className="space-y-2 mt-2 min-h-48">
                     <div className="flex-start space-x-2">
-                      {files.map((file, index: number) => (
+                      {files?.map((file, index: number) => (
                         <div
                           key={file.url}
                           className="flex justify-center items-center gap-2"
@@ -409,7 +410,7 @@ const ProductForm = ({
           >
             {form.formState.isSubmitting
               ? t('Submitting_Loading')
-              : `${type} ${t('Products')}`}
+              : `${type === 'Update' ? a('Update') : a('Create')} ${t('Products')}`}
           </Button>
         </div>
       </form>

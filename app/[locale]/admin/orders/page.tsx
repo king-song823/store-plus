@@ -11,21 +11,26 @@ import {
 } from '@/app/[locale]/components/ui/table';
 import { getAllOrders, deleteOrder } from '@/lib/actions/order.action';
 import { formatCurrency, formatDateTime, formatId } from '@/lib/utils';
-import { Metadata } from 'next';
 import { Link } from '@/i18n/navigation';
 import DeleteDialog from '@/app/[locale]/components/shared/delete-dialog';
-export const metadata: Metadata = {
-  title: 'Admin Orders',
-};
+import { getTranslations } from 'next-intl/server';
+
+export async function generateMetadata() {
+  const t = await getTranslations('Common');
+  return {
+    title: t('Admin_Orders'),
+  };
+}
 
 const OrdersPage = async (props: {
   searchParams: Promise<{ page: string; query: string }>;
 }) => {
+  const c = await getTranslations('Common');
   const { page = '1', query: searchText } = await props.searchParams;
 
   const session = await auth();
   if (session?.user.role !== 'admin')
-    throw new Error('admin permission required');
+    throw new Error(c('Admin_permission_required'));
 
   const orders = await getAllOrders({
     page: Number(page),
@@ -35,13 +40,13 @@ const OrdersPage = async (props: {
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-3">
-        <h1 className="h2-bold">Orders</h1>
+        <h1 className="h2-bold">{c('Orders')}</h1>
         {searchText && (
           <div>
-            Filtered by <i>&quot;{searchText}&quot;</i>{' '}
+            {c('Filtered_by')} <i>&quot;{searchText}&quot;</i>{' '}
             <Link href={`/admin/orders`}>
               <Button variant="outline" size="sm">
-                Remove Filter
+                {c('Remove_Filter')}
               </Button>
             </Link>
           </div>
@@ -51,13 +56,13 @@ const OrdersPage = async (props: {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>ID</TableHead>
-              <TableHead>Buyer</TableHead>
-              <TableHead>DATE</TableHead>
-              <TableHead>TOTAL</TableHead>
-              <TableHead>PAID</TableHead>
-              <TableHead>DELIVERED</TableHead>
-              <TableHead>ACTIONS</TableHead>
+              <TableHead>{c('ID')}</TableHead>
+              <TableHead>{c('Buyer')}</TableHead>
+              <TableHead>{c('Date')}</TableHead>
+              <TableHead>{c('Total')}</TableHead>
+              <TableHead>{c('Paid')}</TableHead>
+              <TableHead>{c('Delivered')}</TableHead>
+              <TableHead>{c('Actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -74,16 +79,16 @@ const OrdersPage = async (props: {
                 <TableCell>
                   {order.isPaid && order.paidAt
                     ? formatDateTime(order.paidAt).dateTime
-                    : 'Not Paid'}
+                    : c('Not_Paid')}
                 </TableCell>
                 <TableCell>
                   {order.isDelivered && order.deliveredAt
                     ? formatDateTime(order.deliveredAt).dateTime
-                    : 'Not Delivered'}
+                    : c('Not_Delivered')}
                 </TableCell>
                 <TableCell className="flex gap-2">
                   <Button asChild variant="outline" size="sm">
-                    <Link href={`/order/${order.id}`}>Details</Link>
+                    <Link href={`/order/${order.id}`}>{c('Details')}</Link>
                   </Button>
                   <DeleteDialog id={order.id} action={deleteOrder} />
                 </TableCell>

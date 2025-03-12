@@ -2,12 +2,12 @@
 
 import { CartItem } from '@/types';
 import { converToPlainObject, formatError, round2 } from '../utils';
-// import { cookies } from 'next/headers';
 import { auth } from '@/auth';
 import { prisma } from '@/db/prisma';
 import { cartItemSchema, insertCartSchema } from '../validator';
 import { revalidatePath } from 'next/cache';
 import { Prisma } from '@prisma/client';
+import { getTranslations } from 'next-intl/server';
 
 // Calculate cart price based on items
 const calcPrice = (items: CartItem[]) => {
@@ -30,6 +30,7 @@ export async function addItemToCart(data: CartItem) {
   try {
     // Get session and user ID
     const session = await auth();
+    const c = await getTranslations('Common');
     const userId = session?.user?.id ? session.user.id : undefined;
     // Parse and validate submitted item data
     const item = cartItemSchema.parse(data);
@@ -39,7 +40,7 @@ export async function addItemToCart(data: CartItem) {
         id: item.productId,
       },
     });
-    if (!product) throw new Error('Product not found');
+    if (!product) throw new Error(c('Product_Not_Found'));
     // Get cart from database
     const cart = await getMyCart();
 
@@ -59,7 +60,7 @@ export async function addItemToCart(data: CartItem) {
       revalidatePath(`/product/${product.slug}`);
       return {
         success: true,
-        message: 'Item added to cart successfully',
+        message: c('Item_Added_To_Cart_Successfully'),
       };
     } else {
       // Check for existing item in cart
@@ -70,7 +71,7 @@ export async function addItemToCart(data: CartItem) {
       // if not enough stock, threw error
       if (existItem) {
         if (product.stock < existItem.qty + 1) {
-          throw new Error(' Not enough stock');
+          throw new Error(c('Not_Enough_Stock'));
         }
 
         // Increase quanitily of existing item
@@ -78,7 +79,7 @@ export async function addItemToCart(data: CartItem) {
           existItem.qty + 1;
       } else {
         // If stock, add item to cart
-        if (product.stock < 1) throw new Error('Not enough stock');
+        if (product.stock < 1) throw new Error(c('Not_Enough_Stock'));
         cart.items.push(item);
       }
       // Save to database
@@ -93,9 +94,7 @@ export async function addItemToCart(data: CartItem) {
 
       return {
         success: true,
-        message: `${product.name} ${
-          existItem ? 'updated in' : 'added to'
-        } cart successfully`,
+        message: `${product.name} ${existItem ? c('Updated_In') : c('Added_To')} ${c('Cart_Successfully')}`,
       };
     }
   } catch (error) {
@@ -109,8 +108,6 @@ export async function addItemToCart(data: CartItem) {
 // Get user cart from database
 export async function getMyCart() {
   // Check for cart cookie
-  // const sessionCartId = (await cookies()).get('sessionCartId')?.value;
-
   // Get session and user ID
   const session = await auth();
   const userId = session?.user?.id ? (session.user.id as string) : undefined;
@@ -136,21 +133,22 @@ export async function getMyCart() {
 export async function removeItemFromCart(productId: string) {
   try {
     // Check Product
+    const c = await getTranslations('Common');
     const product = await prisma.product.findFirst({
       where: {
         id: productId,
       },
     });
 
-    if (!product) throw new Error('Prodcut not found');
+    if (!product) throw new Error(c('Product_Not_Found'));
 
     // Check Cart
     const cart = await getMyCart();
-    if (!cart) throw new Error('Cart not found');
+    if (!cart) throw new Error(c('Cart_Not_Found'));
 
     // Check Cart include Item
     const exist = cart.items.find((i) => i.productId === productId);
-    if (!exist) throw new Error('Item not found');
+    if (!exist) throw new Error(c('Item_Not_Found'));
 
     // If cart has only one
     if (exist.qty === 1) {
@@ -175,11 +173,7 @@ export async function removeItemFromCart(productId: string) {
 
     return {
       success: true,
-      message: `${product.name} ${
-        cart.items.find((i) => i.productId === productId)
-          ? 'updated in'
-          : 'removed from'
-      } cart successfully `,
+      message: `${product.name} ${cart.items.find((i) => i.productId === productId) ? c('Updated_In') : c('Removed_From')} ${c('Cart_Successfully')}`,
     };
   } catch (error) {
     return {

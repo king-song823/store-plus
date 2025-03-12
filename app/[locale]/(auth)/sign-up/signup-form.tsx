@@ -8,6 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { signUp } from '@/lib/actions/user.actions';
+import { useTranslations } from 'next-intl';
 
 const SignUpForm = () => {
   const [data, action] = useActionState(signUp, {
@@ -17,12 +18,13 @@ const SignUpForm = () => {
 
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/';
+  const c = useTranslations('Common');
 
   const SignUpButton = () => {
     const { pending } = useFormStatus();
     return (
       <Button disabled={pending} className="w-full" variant="default">
-        {pending ? 'Submitting...' : 'Sign Up'}
+        {pending ? c('Submitting_Loading') : c('Sign_Up')}
       </Button>
     );
   };
@@ -32,7 +34,7 @@ const SignUpForm = () => {
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="space-y-6">
         <div>
-          <Label htmlFor="name">Name</Label>
+          <Label htmlFor="name">{c('Name')}</Label>
           <Input
             id="name"
             name="name"
@@ -43,7 +45,7 @@ const SignUpForm = () => {
           />
         </div>
         <div>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{c('Email')}</Label>
           <Input
             id="email"
             name="email"
@@ -54,7 +56,7 @@ const SignUpForm = () => {
           />
         </div>
         <div>
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">{c('Password')}</Label>
           <Input
             id="password"
             name="password"
@@ -65,7 +67,7 @@ const SignUpForm = () => {
           />
         </div>
         <div>
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Label htmlFor="confirmPassword">{c('Confirm_Password')}</Label>
           <Input
             id="confirmPassword"
             name="confirmPassword"
@@ -84,13 +86,13 @@ const SignUpForm = () => {
         )}
 
         <div className="text-sm text-center text-muted-foreground">
-          Already have an account?{' '}
+          {c('Already_Have_An_Account')}{' '}
           <Link
             target="_self"
             className="link"
             href={`/sign-in?callbackUrl=${callbackUrl}`}
           >
-            Sign In
+            {c('Sign_In')}
           </Link>
         </div>
       </div>

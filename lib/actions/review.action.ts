@@ -6,6 +6,7 @@ import { formatError } from '../utils';
 import { auth } from '@/auth';
 import { prisma } from '@/db/prisma';
 import { revalidatePath } from 'next/cache';
+import { getTranslations } from 'next-intl/server';
 
 // Create & Update Reviews
 export async function createUpdateReview(
@@ -13,7 +14,8 @@ export async function createUpdateReview(
 ) {
   try {
     const session = await auth();
-    if (!session) throw new Error('User is not authenticated');
+    const c = await getTranslations('Common');
+    if (!session) throw new Error(c('User_Not_Authenticated'));
 
     // Validate and store the review
     const review = insertReviewSchema.parse({
@@ -26,7 +28,7 @@ export async function createUpdateReview(
       where: { id: review.productId },
     });
 
-    if (!product) throw new Error('Product not found');
+    if (!product) throw new Error(c('Product_Not_Found'));
 
     // Check if user already reviewed
     const reviewExists = await prisma.review.findFirst({
@@ -77,13 +79,12 @@ export async function createUpdateReview(
 
     return {
       success: true,
-      message: 'Review Updated Successfully',
+      message: c('Review_Updated_Successfully'),
     };
   } catch (error) {
     return { success: false, message: formatError(error) };
   }
 }
-
 // Get all reviews for a product
 export async function getReviews({ productId }: { productId: string }) {
   const data = await prisma.review.findMany({
@@ -112,8 +113,9 @@ export async function getReviewByProductId({
   productId: string;
 }) {
   const session = await auth();
+  const c = await getTranslations('Common');
 
-  if (!session) throw new Error('User is not authenticated');
+  if (!session) throw new Error(c('User_Not_Authenticated'));
 
   return await prisma.review.findFirst({
     where: {

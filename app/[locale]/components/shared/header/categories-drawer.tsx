@@ -2,6 +2,7 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
+  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -9,14 +10,13 @@ import {
 import { getAllCategories } from '@/lib/actions/product.actions';
 import { Button } from '@/app/[locale]/components/ui/button';
 import { MenuIcon } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 
 const CategoriesDrawer = async () => {
   const categories = await getAllCategories();
   const t = await getTranslations('Common');
-  const locale = (await cookies()).get('locale')?.value;
+  const locale = await getLocale();
 
   return (
     <Drawer direction="left">
@@ -25,9 +25,15 @@ const CategoriesDrawer = async () => {
           <MenuIcon />
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="h-full max-w-sm">
+
+      <DrawerContent
+        className="h-full max-w-sm"
+        aria-describedby="dialog-description"
+      >
         <DrawerHeader>
           <DrawerTitle>{t('Select_Category')}</DrawerTitle>
+          <DrawerDescription />
+
           <div className="space-y-1">
             {categories.map((x) => (
               <Button

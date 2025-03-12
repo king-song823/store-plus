@@ -4,7 +4,7 @@ import { Product } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ProductList = async ({ data, title }: { data: any; title?: string }) => {
-  const t = await getTranslations('HomePage');
+  const t = await getTranslations('Common');
 
   return (
     <div className="my-10">

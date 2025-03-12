@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 const links = [
   {
     title: 'Profile',
@@ -19,7 +20,7 @@ const MainNav = ({
   ...props
 }: React.HTMLAttributes<HTMLElement>) => {
   const pathname = usePathname();
-
+  const c = useTranslations('Common');
   return (
     <nav
       className={cn('flex items-center space-x-4 lg:space-x-6', className)}
@@ -34,7 +35,7 @@ const MainNav = ({
             pathname.includes(item.href) ? '' : 'text-muted-foreground'
           )}
         >
-          {item.title}
+          {c(item.title)}
         </Link>
       ))}
     </nav>

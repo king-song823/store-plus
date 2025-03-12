@@ -1,14 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Metadata } from 'next';
 import { Link } from '@/i18n/navigation';
 import { notFound, redirect } from 'next/navigation';
 import Stripe from 'stripe';
 import { getOrderById } from '@/lib/actions/order.action';
 import { Button } from '@/app/[locale]/components/ui/button';
+import { getTranslations } from 'next-intl/server';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
-export const metadata: Metadata = {
-  title: 'Stripe Payment Success',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('Common');
+  return {
+    title: t('Stripe_Payment_Success'),
+  };
+}
 const SuccessPage = async (props: {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ payment_intent: string }>;
