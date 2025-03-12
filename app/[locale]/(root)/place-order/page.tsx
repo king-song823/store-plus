@@ -1,6 +1,5 @@
 import CheckoutSteps from '@/app/[locale]/components/shared/check-steps';
 import { Card, CardContent } from '@/app/[locale]/components/ui/card';
-import { Metadata } from 'next';
 import Image from 'next/image';
 import {
   Table,
