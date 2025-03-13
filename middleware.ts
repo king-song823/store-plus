@@ -8,7 +8,7 @@ export const config = {
   matcher: [
     '/',
     '/(en|zh)/:path*',
-    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+    '/((?!api|_next/|images/|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 };
 
