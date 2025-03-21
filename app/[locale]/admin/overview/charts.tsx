@@ -1,5 +1,6 @@
 'use client';
 
+import { RMB } from '@/lib/constants';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
 const Charts = ({
@@ -22,7 +23,7 @@ const Charts = ({
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `¥${value}`}
+          tickFormatter={(value) => `${RMB}${value}`}
         />
         <Bar
           dataKey="totalSales"

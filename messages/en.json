@@ -9,6 +9,11 @@
     "Error_Page": "Page Error"
   },
   "Common": {
+    "AliPay": "AliPay",
+    "Redirecting_Loading": "Redirecting...",
+    "Pay_Fail": "Payment Failed",
+    "Alipay_Payment": "AliPay",
+    "WeChat_Payment": "WeChatPay",
     "English": "English",
     "Chinese": "Chinese",
     "Money_Back_Guarantee": "Money Back Guarantee",
@@ -81,7 +86,7 @@
     "Order_Created": "Order created",
     "Order_Not_Found": "Order not found",
     "Error_In_PayPal_Payment": "Error in PayPal payment",
-    "Your_Order_Has_Been_Successfully_Paid_By_PayPal": "Your order has been successfully paid by PayPal!",
+    "Your_Order_Has_Been_Successfully_Paid_By_AliPay": "Your order has been successfully paid by AliPay!",
     "Order_Is_Already_Paid": "Order is already paid",
     "Order_Deleted_Successfully": "Order deleted successfully",
     "Order_Paid_Successfully": "Order paid successfully",

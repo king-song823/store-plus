@@ -217,7 +217,51 @@ export async function approvePayPalOrder(
     revalidatePath(`/${locale}/order/${orderId}`);
     return {
       success: true,
-      message: c('Your_Order_Has_Been_Successfully_Paid_By_PayPal'),
+      message: c('Your_Order_Has_Been_Successfully_Paid_By_AliPay'),
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: formatError(error),
+    };
+  }
+}
+
+// Aprove AliPay Order
+export async function approveAliPayOrder(
+  orderId: string,
+  captureData: {
+    id: string;
+    status: string;
+    total_amount: string;
+  }
+) {
+  try {
+    // Check order not found
+    const c = await getTranslations('Common');
+    const locale = await getLocale();
+
+    const order = await prisma.order.findFirst({
+      where: {
+        id: orderId,
+      },
+    });
+    if (!order) throw new Error(c('Order_Not_Found'));
+    // Update order to paid
+    await updateOrderToPaid({
+      orderId,
+      paymentResult: {
+        id: captureData.id,
+        status: captureData.status,
+        emailAddress: '',
+        pricePaid: captureData.total_amount,
+      },
+    });
+
+    revalidatePath(`/${locale}/order/${orderId}`);
+    return {
+      success: true,
+      message: c('Your_Order_Has_Been_Successfully_Paid_By_AliPay'),
     };
   } catch (error) {
     return {

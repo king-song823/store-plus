@@ -1,3 +1,4 @@
+import { RMB } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
 const ProductPrice = ({
@@ -12,7 +13,7 @@ const ProductPrice = ({
 
   return (
     <p className={cn('text-2xl', className)}>
-      <span className="text-xs align-super">¥</span>
+      <span className="text-xs align-super">{RMB}</span>
       {intValue}
       <span className="text-xs align-super">.{floatValue}</span>
     </p>

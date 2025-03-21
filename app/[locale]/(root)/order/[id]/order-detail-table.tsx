@@ -31,6 +31,8 @@ import { useTransition } from 'react';
 import { Button } from '@/app/[locale]/components/ui/button';
 import StripePayment from './stripe-payment';
 import { useTranslations } from 'next-intl';
+import AliPayButton from '@/app/[locale]/components/AlipayButton';
+import { RMB } from '@/lib/constants';
 // Checks the loading status of the PayPal script
 function PrintLoadingState() {
   const [{ isPending, isRejected }] = usePayPalScriptReducer();
@@ -55,17 +57,17 @@ const OrderDetailsTable = ({
   stripeClientSecret: string | null;
 }) => {
   const {
-    shippingAddress,
+    // shippingAddress,
     orderItems,
-    itemsPrice,
-    taxPrice,
-    shippingPrice,
+    // itemsPrice,
+    // taxPrice,
+    // shippingPrice,
     totalPrice,
     paymentMethod,
     isPaid,
     paidAt,
     isDelivered,
-    deliveredAt,
+    // deliveredAt,
   } = order;
 
   const c = useTranslations('Common');
@@ -153,15 +155,14 @@ const OrderDetailsTable = ({
               <p>{paymentMethod}</p>
               {isPaid ? (
                 <Badge variant="secondary">
-                  {c('Paid_At')}
-                  {formatDateTime(paidAt!).dateTime}
+                  {c('Paid_At')} : {formatDateTime(paidAt!).dateTime}
                 </Badge>
               ) : (
                 <Badge variant="destructive">{c('Not_Paid')}</Badge>
               )}
             </CardContent>
           </Card>
-          <Card>
+          {/* <Card>
             <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">{c('Shipping_Address')}</h2>
               <p>{shippingAddress.fullName}</p>
@@ -177,7 +178,7 @@ const OrderDetailsTable = ({
                 <Badge variant="destructive">{c('Not_Delivered')}</Badge>
               )}
             </CardContent>
-          </Card>
+          </Card> */}
           <Card>
             <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">{c('Not_Delivered')}</h2>
@@ -209,8 +210,11 @@ const OrderDetailsTable = ({
                       <TableCell>
                         <span className="px-2">{item.qty}</span>
                       </TableCell>
-                      <TableCell className="text-right">
-                        ¥{item.price}
+                      <TableCell>
+                        <span className="text-center">
+                          {RMB}
+                          {item.price}
+                        </span>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -223,20 +227,20 @@ const OrderDetailsTable = ({
           <Card>
             <CardContent className="p-4 space-y-4 gap-4">
               <h2 className="text-xl pb-4">{c('Order_Summary')}</h2>
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <div>{p('Item')}</div>
                 <div>{formatCurrency(itemsPrice)}</div>
-              </div>
-              <div className="flex justify-between">
+              </div> */}
+              {/* <div className="flex justify-between">
                 <div>{c('Tax')}</div>
                 <div>{formatCurrency(taxPrice)}</div>
               </div>
               <div className="flex justify-between">
                 <div>{c('Shipping_Address')}</div>
                 <div>{formatCurrency(shippingPrice)}</div>
-              </div>
+              </div> */}
               <div className="flex justify-between">
-                <div>{a('TOTAL')}</div>
+                <div>{c('Total')}</div>
                 <div>{formatCurrency(totalPrice)}</div>
               </div>
               {/* PayPal Payment */}
@@ -256,6 +260,15 @@ const OrderDetailsTable = ({
                       onApprove={handleApprovePayPalOrder}
                     />
                   </PayPalScriptProvider>
+                </div>
+              )}
+              {!isPaid && paymentMethod === 'Alipay_Payment' && (
+                <div className="w-full">
+                  <AliPayButton
+                    orderId={order.id}
+                    amount={order.totalPrice}
+                    subject={order.id}
+                  />
                 </div>
               )}
               {isAdmin && !isPaid && paymentMethod === 'CashOnDelivery' && (
