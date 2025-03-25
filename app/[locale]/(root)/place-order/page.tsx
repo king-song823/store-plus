@@ -41,7 +41,7 @@ const PlaceOrder = async () => {
 
   return (
     <>
-      <CheckoutSteps current={2} />
+      <CheckoutSteps current={3} />
       <h1 className="py-4 text-2xl">{c('Order_Summary')}</h1>
 
       <div className="grid md:grid-cols-3 md:gap-5">

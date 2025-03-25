@@ -152,7 +152,7 @@ const OrderDetailsTable = ({
           <Card>
             <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">{c('Payment_Method')}</h2>
-              <p>{paymentMethod}</p>
+              <p>{c(paymentMethod)}</p>
               {isPaid ? (
                 <Badge variant="secondary">
                   {c('Paid_At')} : {formatDateTime(paidAt!).dateTime}
@@ -181,7 +181,7 @@ const OrderDetailsTable = ({
           </Card> */}
           <Card>
             <CardContent className="p-4 gap-4">
-              <h2 className="text-xl pb-4">{c('Not_Delivered')}</h2>
+              <h2 className="text-xl pb-4">{c('Order_Items')}</h2>
               <Table>
                 <TableHeader>
                   <TableRow>

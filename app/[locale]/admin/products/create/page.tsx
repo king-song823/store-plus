@@ -1,7 +1,7 @@
 import ProductForm from '@/app/[locale]/components/shared/admin/prodcut-form';
 import { getTranslations } from 'next-intl/server';
 export async function generateMetadata() {
-  const t = await getTranslations('Common');
+  const t = await getTranslations('Admin');
   return {
     title: t('Create_Product'),
   };
