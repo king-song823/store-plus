@@ -1,21 +1,24 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import fs from 'fs';
-import path from 'path';
 
 const WECHAT_APP_ID = process.env.WECHAT_APP_ID!;
 const WECHAT_MCH_ID = process.env.WECHAT_MCH_ID!;
 const WECHAT_SERIAL_NO = process.env.WECHAT_SERIAL_NO!;
-const WECHAT_PRIVATE_KEY_PATH = process.env.WECHAT_PRIVATE_KEY_PATH!;
 const WECHAT_NOTIFY_URL = process.env.NEXT_PUBLIC_SERVER_URL!;
+const WECHAT_APICLIENT_KEY = process.env.WECHAT_APICLIENT_KEY!;
 const WECHAT_API_URL = process.env.WECHAT_API_URL!;
 
 // 读取商户私钥
-const privateKey = fs.readFileSync(
-  path.resolve(WECHAT_PRIVATE_KEY_PATH),
-  'utf8'
+// const privateKey = fs.readFileSync(
+//   path.resolve(WECHAT_PRIVATE_KEY_PATH),
+//   'utf8'
+// );
+const privateKey = Buffer.from(WECHAT_APICLIENT_KEY, 'base64').toString(
+  'utf-8'
 );
+
+console.log('privateKey', privateKey);
 
 /**
  * 生成随机字符串

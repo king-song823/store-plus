@@ -2,20 +2,23 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import fs from 'fs';
-import path from 'path';
 import { approveAliPayOrder } from '@/lib/actions/order.action';
 import { revalidatePath } from 'next/cache';
 
 // 读取商户 API V3 证书的 **微信支付平台公钥**
-const WECHAT_PUBLIC_KEY_PATH = process.env.WECHAT_PUBLIC_KEY_PATH!;
+const WECHAT_APICLIENT_CERT = process.env.WECHAT_APICLIENT_CERT!;
 const WECHAT_API_V3_KEY = process.env.WECHAT_API_V3_KEY!;
 
 // 读取公钥（用于验证微信支付签名）
-const wechatPublicKey = fs.readFileSync(
-  path.resolve(WECHAT_PUBLIC_KEY_PATH),
-  'utf8'
+// const wechatPublicKey = fs.readFileSync(
+//   path.resolve(WECHAT_PUBLIC_KEY_PATH),
+//   'utf8'
+// );
+const wechatPublicKey = Buffer.from(WECHAT_APICLIENT_CERT, 'base64').toString(
+  'utf-8'
 );
+
+console.log('wechatPublicKey', wechatPublicKey);
 
 /**
  * 验证微信支付签名
