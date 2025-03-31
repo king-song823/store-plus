@@ -256,8 +256,6 @@ export async function approveAliPayOrder(
       },
     });
     revalidatePath(`/user/orders`);
-    console.log('岁限制性');
-    // redirect(`/order/${orderId}?timestamp=${Date.now()}`);
 
     return {
       success: true,
