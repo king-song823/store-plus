@@ -103,10 +103,7 @@ export async function POST(req: NextRequest) {
         total_amount: String(Number(amount.total) / 100),
       });
       if (res.success) {
-        console.log('还执行吗', res, revalidatePath);
         revalidatePath('/user/orders');
-        revalidatePath('/user/orders', 'page');
-        revalidatePath('/user/orders', 'layout');
       }
     }
 
