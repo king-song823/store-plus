@@ -10,10 +10,9 @@ import { paypal } from '../paypal';
 import { revalidatePath } from 'next/cache';
 import { PAGE_SIZE } from '../constants';
 import { Prisma } from '@prisma/client';
-import { CartItem, PaymentResult, ShippingAddress } from '@/types';
+import { CartItem, PaymentResult } from '@/types';
 import { sendPurchaseReceipt } from '@/email';
 import { getLocale, getTranslations } from 'next-intl/server';
-
 export async function createOrder() {
   try {
     const session = await auth();
@@ -35,13 +34,13 @@ export async function createOrder() {
       };
     }
 
-    if (!user.address) {
-      return {
-        success: false,
-        message: c('No_Shipping_Address'),
-        redirectTo: `/${locale}/shipping-address`,
-      };
-    }
+    // if (!user.address) {
+    //   return {
+    //     success: false,
+    //     message: c('No_Shipping_Address'),
+    //     redirectTo: `/${locale}/shipping-address`,
+    //   };
+    // }
 
     if (!user.paymentMethod) {
       return {
@@ -53,8 +52,10 @@ export async function createOrder() {
 
     // Create order object
     const order = insertOrderSchema.parse({
+      // id: orderId,
       userId: user.id,
-      shippingAddress: user.address,
+      // shippingAddress: user.address,
+      // shippingAddress: shippingAddressDefaultValues,
       paymentMethod: user.paymentMethod,
       itemsPrice: cart.itemsPrice,
       shippingPrice: cart.shippingPrice,
@@ -92,11 +93,10 @@ export async function createOrder() {
     });
 
     if (!insertedOrderId) throw new Error(c('Order_Not_Created'));
-
     return {
       success: true,
       message: c('Order_Created'),
-      redirectTo: `/${locale}/order/${insertedOrderId}`,
+      redirectTo: `/order/${insertedOrderId}`,
     };
   } catch (error) {
     return { success: false, message: formatError(error) };
@@ -185,7 +185,6 @@ export async function approvePayPalOrder(
   try {
     // Check order not found
     const c = await getTranslations('Common');
-    const locale = await getLocale();
 
     const order = await prisma.order.findFirst({
       where: {
@@ -214,7 +213,7 @@ export async function approvePayPalOrder(
       },
     });
 
-    revalidatePath(`/${locale}/order/${orderId}`);
+    revalidatePath(`/order/${orderId}`);
     return {
       success: true,
       message: c('Your_Order_Has_Been_Successfully_Paid_By_AliPay'),
@@ -239,7 +238,6 @@ export async function approveAliPayOrder(
   try {
     // Check order not found
     const c = await getTranslations('Common');
-    const locale = await getLocale();
 
     const order = await prisma.order.findFirst({
       where: {
@@ -257,8 +255,10 @@ export async function approveAliPayOrder(
         pricePaid: captureData.total_amount,
       },
     });
+    revalidatePath(`/user/orders`);
+    console.log('岁限制性');
+    // redirect(`/order/${orderId}?timestamp=${Date.now()}`);
 
-    revalidatePath(`/${locale}/order/${orderId}`);
     return {
       success: true,
       message: c('Your_Order_Has_Been_Successfully_Paid_By_AliPay'),
@@ -350,7 +350,7 @@ export async function updateOrderToPaid({
   sendPurchaseReceipt({
     order: {
       ...params,
-      shippingAddress: updatedOrder.shippingAddress as ShippingAddress,
+      // shippingAddress: updatedOrder.shippingAddress as ShippingAddress,
       paymentResult: updatedOrder.paymentResult as PaymentResult,
     },
   });
@@ -508,7 +508,6 @@ export async function getAllOrders({
 // Delete Order (Admin)
 export async function deleteOrder(id: string) {
   try {
-    const locale = await getLocale();
     const c = await getTranslations('Common');
 
     await prisma.order.delete({
@@ -516,7 +515,7 @@ export async function deleteOrder(id: string) {
         id,
       },
     });
-    revalidatePath(`/${locale}/admin/orders`);
+    revalidatePath(`/admin/orders`);
     return {
       success: true,
       message: c('Order_Deleted_Successfully'),
@@ -529,10 +528,9 @@ export async function deleteOrder(id: string) {
 // Update order to paid by COD
 export async function updateOrderToPaidByCOD(orderId: string) {
   try {
-    const locale = await getLocale();
     const c = await getTranslations('Common');
     await updateOrderToPaid({ orderId });
-    revalidatePath(`/${locale}/order/${orderId}`);
+    revalidatePath(`/order/${orderId}`);
     return { success: true, message: c('Order_Paid_Successfully') };
   } catch (error) {
     return handleError(error);
@@ -548,7 +546,6 @@ export async function deliverOrder(orderId: string) {
       },
     });
     const c = await getTranslations('Common');
-    const locale = await getLocale();
 
     if (!order) throw new Error(c('User_Not_Found'));
     if (!order.isPaid) throw new Error(c('Order_Not_Created'));
@@ -562,7 +559,7 @@ export async function deliverOrder(orderId: string) {
         deliveredAt: new Date(),
       },
     });
-    revalidatePath(`/${locale}/order/${orderId}`);
+    revalidatePath(`/order/${orderId}`);
     return { success: true, message: c('Order_Delivered_Successfully') };
   } catch (error) {
     return handleError(error);

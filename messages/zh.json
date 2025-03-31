@@ -4,6 +4,8 @@
   },
   "Common": {
     "AliPay": "支付宝支付",
+    "Wechat_Loading": "二维码生成中...",
+    "WeChat_Pay": "微信支付",
     "Redirecting_Loading": "跳转中...",
     "Pay_Fail": "支付失败",
     "Alipay_Payment": "支付宝",

@@ -7,9 +7,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { shippingAddressSchema } from '@/lib/validator';
 import { ControllerRenderProps } from 'react-hook-form';
 import { shippingAddressDefaultValues } from '@/lib/constants';
-import { toast } from '@/hooks/use-toast';
+// import { toast } from '@/hooks/use-toast';
 import { useTransition } from 'react';
-import { updateUserAddress } from '@/lib/actions/user.actions';
+// import { updateUserAddress } from '@/lib/actions/user.actions';
 import { useRouter } from '@/i18n/navigation';
 import {
   Form,
@@ -42,14 +42,15 @@ const ShippingAddressForm = ({
     values
   ) => {
     startTransition(async () => {
-      const res = await updateUserAddress(values);
-      if (!res.message) {
-        toast({
-          variant: 'destructive',
-          description: res.message,
-        });
-        return;
-      }
+      console.log(values);
+      // const res = await updateUserAddress(values);
+      // if (!res.message) {
+      //   toast({
+      //     variant: 'destructive',
+      //     description: res.message,
+      //   });
+      //   return;
+      // }
       router.push(`/payment-method`);
     });
   };

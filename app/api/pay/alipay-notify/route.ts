@@ -12,8 +12,6 @@ const alipaySdk = new AlipaySdk({
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
   const params = Object.fromEntries(formData.entries());
-  console.log('params', params);
-
   // 1️⃣ **校验支付宝签名**
   const isValid = alipaySdk.checkNotifySign(params);
   if (!isValid) {

@@ -32,6 +32,7 @@ import { Button } from '@/app/[locale]/components/ui/button';
 import StripePayment from './stripe-payment';
 import { useTranslations } from 'next-intl';
 import AliPayButton from '@/app/[locale]/components/AlipayButton';
+import WeChatPayButton from '@/app/[locale]/components/WeChatPayButton';
 import { RMB } from '@/lib/constants';
 // Checks the loading status of the PayPal script
 function PrintLoadingState() {
@@ -268,6 +269,14 @@ const OrderDetailsTable = ({
                     orderId={order.id}
                     amount={order.totalPrice}
                     subject={order.id}
+                  />
+                </div>
+              )}
+              {!isPaid && paymentMethod === 'WeChat_Payment' && (
+                <div className="w-full">
+                  <WeChatPayButton
+                    orderId={order.id}
+                    totalPrice={order.totalPrice}
                   />
                 </div>
               )}

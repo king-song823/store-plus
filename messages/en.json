@@ -9,6 +9,8 @@
     "Error_Page": "Page Error"
   },
   "Common": {
+    "Wechat_Loading": "Generating QR code...",
+    "WeChat_Pay": "WeChatPay",
     "AliPay": "AliPay",
     "Redirecting_Loading": "Redirecting...",
     "Pay_Fail": "Payment Failed",

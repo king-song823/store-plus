@@ -9,8 +9,8 @@ const CheckoutSteps = async ({ current = 0 }) => {
     <div className="flex-between  flex-col md:flex-row  space-x-2 space-y-2 mb-10">
       {[
         c('User_Login'),
-        c('Shipping_Address'),
-        c('Payment_Method'),
+        // c('Shipping_Address'),
+        // c('Payment_Method'),
         c('Orders'),
       ].map((step, index) => (
         <React.Fragment key={step}>

@@ -146,7 +146,7 @@ export const insertOrderSchema = z.object({
   paymentMethod: z.string().refine((data) => PAYMENT_METHODS.includes(data), {
     message: i18JsonZh['Common']['Invalid_Payment_Method'],
   }),
-  shippingAddress: shippingAddressSchema,
+  // shippingAddress: shippingAddressSchema,
 });
 
 // Insert orderItem shema

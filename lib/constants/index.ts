@@ -29,7 +29,7 @@ export const shippingAddressDefaultValues = {
 };
 
 export const PAYMENT_METHODS = ['Alipay_Payment', 'WeChat_Payment'];
-export const DEFAULT_PAYMENT_METHOD = 'Alipay_Payment';
+export const DEFAULT_PAYMENT_METHOD = 'WeChat_Payment';
 export const PAGE_SIZE = Number(process.env.PAGE_SIZE) || 10;
 export const productDefaultValues = {
   id: '',

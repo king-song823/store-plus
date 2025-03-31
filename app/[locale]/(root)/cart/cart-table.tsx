@@ -132,7 +132,7 @@ const CartTable = ({ cart }: { cart?: Cart }) => {
               </div>
               <Button
                 onClick={() =>
-                  startTransition(() => router.push('/payment-method'))
+                  startTransition(() => router.push('/place-order'))
                 }
                 className="w-full"
                 disabled={isPending}

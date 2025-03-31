@@ -53,6 +53,15 @@ const CURRENCY_FORMATTER = new Intl.NumberFormat('zh-CN', {
   minimumFractionDigits: 2,
 });
 
+export function generateOrderId() {
+  const timestamp = new Date()
+    .toISOString()
+    .replace(/[-:.T]/g, '')
+    .slice(2, 16); // 获取当前时间的前14位字符，去掉符号
+  const random = Math.random().toString(36).substring(2, 11); // 生成9个字符的随机字符串
+  return `lingpao_${timestamp}_${random}`; // 拼接成最终的 ID 格式
+}
+
 // Format currency
 export function formatCurrency(amount: number | string | null) {
   if (typeof amount === 'number') {

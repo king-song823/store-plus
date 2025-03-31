@@ -1,4 +1,4 @@
-import CheckoutSteps from '@/app/[locale]/components/shared/check-steps';
+// import CheckoutSteps from '@/app/[locale]/components/shared/check-steps';
 import { Card, CardContent } from '@/app/[locale]/components/ui/card';
 import Image from 'next/image';
 import {
@@ -41,7 +41,7 @@ const PlaceOrder = async () => {
 
   return (
     <>
-      <CheckoutSteps current={3} />
+      {/* <CheckoutSteps current={1} /> */}
       <h1 className="py-4 text-2xl">{c('Order_Summary')}</h1>
 
       <div className="grid md:grid-cols-3 md:gap-5">
@@ -65,11 +65,11 @@ const PlaceOrder = async () => {
             <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">{c('Payment_Method')}</h2>
               <p>{c(user.paymentMethod)}</p>
-              <div className="mt-3">
+              {/* <div className="mt-3">
                 <Link href="/payment-method">
                   <Button variant="outline">{a('Edit')}</Button>
                 </Link>
-              </div>
+              </div> */}
             </CardContent>
           </Card>
           <Card>
