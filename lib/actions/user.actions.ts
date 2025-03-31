@@ -3,7 +3,7 @@ import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { auth, signIn, signOut } from '@/auth';
 import {
   paymentMethodSchema,
-  shippingAddressSchema,
+  // shippingAddressSchema,
   signInFormSchema,
   signUpFormSchema,
   updateUserSchema,
@@ -11,7 +11,7 @@ import {
 import { hashSync } from 'bcrypt-ts-edge';
 import { prisma } from '@/db/prisma';
 import { formatError, handleError } from '../utils';
-import { ShippingAddress } from '@/types';
+// import { ShippingAddress } from '@/types';
 import { z } from 'zod';
 import { PAGE_SIZE } from '../constants';
 import { revalidatePath } from 'next/cache';
@@ -94,39 +94,39 @@ export async function getUserById(userId: string) {
 }
 
 // Update user's address
-export async function updateUserAddress(data: ShippingAddress) {
-  const c = await getTranslations('Common');
-  try {
-    // find userId
-    const session = await auth();
-    // find user
-    const currentUser = await getUserById(session?.user?.id as string);
-    if (!currentUser) throw new Error(c('User_not_found'));
+// export async function updateUserAddress(data: ShippingAddress) {
+//   const c = await getTranslations('Common');
+//   try {
+//     // find userId
+//     const session = await auth();
+//     // find user
+//     const currentUser = await getUserById(session?.user?.id as string);
+//     if (!currentUser) throw new Error(c('User_not_found'));
 
-    // params
-    const address = shippingAddressSchema.parse(data);
+//     // params
+//     const address = shippingAddressSchema.parse(data);
 
-    // update user address
-    await prisma.user.update({
-      where: {
-        id: currentUser.id,
-      },
-      data: {
-        address,
-      },
-    });
+//     // update user address
+//     await prisma.user.update({
+//       where: {
+//         id: currentUser.id,
+//       },
+//       data: {
+//         address,
+//       },
+//     });
 
-    return {
-      success: true,
-      message: c('Shipping_updated_successfully'),
-    };
-  } catch (error) {
-    return {
-      message: formatError(error),
-      success: false,
-    };
-  }
-}
+//     return {
+//       success: true,
+//       message: c('Shipping_updated_successfully'),
+//     };
+//   } catch (error) {
+//     return {
+//       message: formatError(error),
+//       success: false,
+//     };
+//   }
+// }
 
 // Update payment methods
 export async function updateUserPaymentMethod(

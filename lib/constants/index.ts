@@ -21,17 +21,15 @@ export const signUpDefaultValues = {
 };
 
 export const shippingAddressDefaultValues = {
-  fullName: '',
-  streetAddress: '',
-  city: '',
-  postalCode: '',
-  country: '',
+  fullName: '重庆市渝北区嵩山北路',
+  streetAddress: '9栋2单元401',
+  city: '中国',
+  postalCode: '123456',
+  country: '重庆',
 };
 
-export const PAYMENT_METHODS_ZH = ['支付宝支付', '微信支付'];
-export const PAYMENT_METHODS_EN = ['Alipay Payment', 'WeChat Pay'];
-export const DEFAULT_PAYMENT_METHOD = 'PayPal';
-export const PAYMENT_METHODS = ['PayPal', 'Stripe', 'CashOnDelivery'];
+export const PAYMENT_METHODS = ['Alipay_Payment', 'WeChat_Payment'];
+export const DEFAULT_PAYMENT_METHOD = 'WeChat_Payment';
 export const PAGE_SIZE = Number(process.env.PAGE_SIZE) || 10;
 export const productDefaultValues = {
   id: '',
@@ -61,3 +59,5 @@ export const reviewFormDefaultValues = {
 };
 
 export const SENDER_EMAIL = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
+
+export const RMB = '¥';

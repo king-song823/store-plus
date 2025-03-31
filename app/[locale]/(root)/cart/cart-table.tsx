@@ -20,6 +20,7 @@ import { Card, CardContent } from '@/app/[locale]/components/ui/card';
 import { formatCurrency } from '@/lib/utils';
 import { useRouter } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
+import { RMB } from '@/lib/constants';
 
 const CartTable = ({ cart }: { cart?: Cart }) => {
   const [isPending, startTransition] = useTransition();
@@ -109,7 +110,10 @@ const CartTable = ({ cart }: { cart?: Cart }) => {
                         )}
                       </Button>
                     </TableCell>
-                    <TableCell className="text-right">¥{i.price}</TableCell>
+                    <TableCell className="text-center">
+                      {RMB}
+                      {i.price}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -117,8 +121,10 @@ const CartTable = ({ cart }: { cart?: Cart }) => {
           </div>
           <Card>
             <CardContent className="p-4 gap-4">
-              <div className="pb-3 text-xl">
-                {p('Subtotal')}({cart.items.reduce((a, c) => a + c.qty, 0)}):
+              <div className="pb-3 text-xl flex justify-between">
+                <span>
+                  {p('Subtotal')}({cart.items.reduce((a, c) => a + c.qty, 0)})
+                </span>
                 <span className="font-bold">
                   {' '}
                   {formatCurrency(cart.itemsPrice)}
@@ -126,7 +132,7 @@ const CartTable = ({ cart }: { cart?: Cart }) => {
               </div>
               <Button
                 onClick={() =>
-                  startTransition(() => router.push('/shipping-address'))
+                  startTransition(() => router.push('/place-order'))
                 }
                 className="w-full"
                 disabled={isPending}

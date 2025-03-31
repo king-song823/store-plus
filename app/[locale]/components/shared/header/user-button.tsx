@@ -1,84 +1,23 @@
-import { Link } from '@/i18n/navigation';
 import { auth } from '@/auth';
-import { Button } from '@/app/[locale]/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from '@/app/[locale]/components/ui/dropdown-menu';
-import { signOutUser } from '@/lib/actions/user.actions';
 import { getTranslations } from 'next-intl/server';
+import { UserButtonClient } from './user-button-client';
 
-const UserButton = async () => {
+export default async function UserButton() {
   const session = await auth();
   const firstInitial = session?.user?.name?.charAt(0).toUpperCase() ?? '';
   const t = await getTranslations('Common');
 
-  if (!session) {
-    return (
-      <Link href="/sign-in">
-        <Button>{t('Sign_In')}</Button>
-      </Link>
-    );
-  }
   return (
-    <div className="flex gap-2 items-center">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <div className="flex items-center">
-            <Button
-              variant="ghost"
-              className="relative w-8 h-8 rounded-full ml-2 flex items-center justify-center bg-gray-300"
-            >
-              {firstInitial}
-            </Button>
-          </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56" align="end" forceMount>
-          <DropdownMenuLabel className="font-normal">
-            <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">
-                {session.user?.name}
-              </p>
-              <p className="text-xs leading-none text-muted-foreground">
-                {session.user?.email}
-              </p>
-            </div>
-          </DropdownMenuLabel>
-
-          <DropdownMenuItem>
-            <Link className="w-full" href="/user/orders">
-              {t('Order_History')}
-            </Link>
-          </DropdownMenuItem>
-          {session?.user?.role === 'admin' && (
-            <DropdownMenuItem>
-              <Link className="w-full" href="/admin/overview">
-                {t('Admin')}
-              </Link>
-            </DropdownMenuItem>
-          )}
-          <DropdownMenuItem>
-            <Link className="w-full" href="/user/profile">
-              {t('User_Profile')}
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="p-0 mb-1">
-            <form action={signOutUser} className="w-full">
-              <Button
-                className="w-full py-4 px-2 h-4 justify-start"
-                variant="ghost"
-              >
-                {t('Sign_Out')}
-              </Button>
-            </form>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+    <UserButtonClient
+      user={session?.user}
+      firstInitial={firstInitial}
+      translations={{
+        Sign_In: t('Sign_In'),
+        Order_History: t('Order_History'),
+        Admin: t('Admin'),
+        User_Profile: t('User_Profile'),
+        Sign_Out: t('Sign_Out'),
+      }}
+    />
   );
-};
-
-export default UserButton;
+}

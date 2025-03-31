@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import CheckoutSteps from '@/app/[locale]/components/shared/check-steps';
+// import CheckoutSteps from '@/app/[locale]/components/shared/check-steps';
 import PaymentMethodForm from './payment-method-form';
 import { getUserById } from '@/lib/actions/user.actions';
 import { getTranslations } from 'next-intl/server';
@@ -21,7 +21,7 @@ const PaymentMthodPage = async () => {
   }
   return (
     <>
-      <CheckoutSteps current={2} />
+      {/* <CheckoutSteps current={1} /> */}
       <PaymentMethodForm
         preferredPaymentMethod={currentUser.paymentMethod}
       ></PaymentMethodForm>

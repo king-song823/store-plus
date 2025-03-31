@@ -6,12 +6,7 @@ import { paymentMethodSchema } from '@/lib/validator';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  DEFAULT_PAYMENT_METHOD,
-  // PAYMENT_METHODS_EN,
-  // PAYMENT_METHODS_ZH,
-  PAYMENT_METHODS,
-} from '@/lib/constants';
+import { DEFAULT_PAYMENT_METHOD, PAYMENT_METHODS } from '@/lib/constants';
 import {
   Form,
   FormControl,
@@ -36,7 +31,6 @@ const PaymentMethodForm = ({
 }) => {
   const router = useRouter();
   const { toast } = useToast();
-  // const locale = useLocale();
 
   const form = useForm<z.infer<typeof paymentMethodSchema>>({
     resolver: zodResolver(paymentMethodSchema),
@@ -87,28 +81,22 @@ const PaymentMethodForm = ({
                         onValueChange={field.onChange}
                         className="flex flex-col space-y-2"
                       >
-                        {
-                          // (locale === 'zh'
-                          //   ? PAYMENT_METHODS_ZH
-                          //   : PAYMENT_METHODS_EN
-                          // )
-                          PAYMENT_METHODS.map((paymentMethod) => (
-                            <FormItem
-                              key={paymentMethod}
-                              className="flex items-center space-x-3 space-y-0"
-                            >
-                              <FormControl>
-                                <RadioGroupItem
-                                  value={paymentMethod}
-                                  checked={field.value === paymentMethod}
-                                />
-                              </FormControl>
-                              <FormLabel className="font-normal">
-                                {paymentMethod}
-                              </FormLabel>
-                            </FormItem>
-                          ))
-                        }
+                        {PAYMENT_METHODS.map((paymentMethod) => (
+                          <FormItem
+                            key={paymentMethod}
+                            className="flex items-center space-x-3 space-y-0"
+                          >
+                            <FormControl>
+                              <RadioGroupItem
+                                value={paymentMethod}
+                                checked={field.value === paymentMethod}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {c(paymentMethod)}
+                            </FormLabel>
+                          </FormItem>
+                        ))}
                       </RadioGroup>
                     </FormControl>
                     <FormMessage />

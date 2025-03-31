@@ -28,8 +28,7 @@ CREATE TABLE "User" (
     "role" TEXT NOT NULL DEFAULT 'user',
     "emailVerified" TIMESTAMP(6),
     "image" TEXT,
-    "address" JSON,
-    "paymentMethod" TEXT,
+    "paymentMethod" TEXT NOT NULL DEFAULT 'WeChat_Payment',
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -82,7 +81,6 @@ CREATE TABLE "Cart" (
 CREATE TABLE "Order" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "userId" UUID NOT NULL,
-    "shippingAddress" JSON NOT NULL,
     "paymentMethod" TEXT NOT NULL,
     "paymentResult" JSON,
     "itemsPrice" DECIMAL(12,2) NOT NULL,
