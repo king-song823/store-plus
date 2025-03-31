@@ -27,7 +27,7 @@ function generateNonceStr(length = 32) {
 /**
  * 生成签名
  */
-export function generateSignature(
+function generateSignature(
   method: string,
   url: string,
   body: string,
