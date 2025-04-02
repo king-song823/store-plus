@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getProductBySlug } from '@/lib/actions/product.actions';
 import { Badge } from '@/app/[locale]/components/ui/badge';
 import { Card, CardContent } from '@/app/[locale]/components/ui/card';
@@ -10,6 +11,8 @@ import { auth } from '@/auth';
 import ReviewList from './review-list';
 import Rating from '@/app/[locale]/components/shared/product/rating';
 import { getTranslations } from 'next-intl/server';
+import PageLink from './page-link';
+import PageDownLoad from './page-download';
 
 const ProductDetailsPage = async (props: {
   params: Promise<{ slug: string }>;
@@ -33,7 +36,7 @@ const ProductDetailsPage = async (props: {
           </div>
 
           {/* Details Column */}
-          <div className="col-span-2 p-5">
+          <div className="col-span-1 p-5">
             <div className="flex flex-col gap-6">
               <p>
                 {product.brand} {product.category}
@@ -56,40 +59,23 @@ const ProductDetailsPage = async (props: {
               <p>{product.description}</p>
             </div>
           </div>
-          {/* Action Column */}
-          <div>
+          <div className="col-span-2">
             <Card>
               <CardContent className="p-4">
-                <div className="mb-2 flex justify-between">
-                  <div>{t('Price')}</div>
-                  <div>
-                    <ProductPrice value={Number(product.price)} />
-                  </div>
-                </div>
-                <div className="mb-2 flex justify-between">
-                  <div>{t('Status')}</div>
-                  {product.stock > 0 ? (
-                    <Badge variant="outline">{t('In_tock')}</Badge>
-                  ) : (
-                    <Badge variant="destructive">{t('Unavailable')}</Badge>
-                  )}
-                </div>
-                {product.stock > 0 && (
-                  <div className=" flex-center">
-                    <AddToCart
-                      userId={session?.user?.id as string}
-                      cart={cart}
-                      item={{
-                        productId: product.id,
-                        name: product.name,
-                        slug: product.slug,
-                        price: product.price,
-                        qty: 1,
-                        image: product.images![0],
-                      }}
-                    />
-                  </div>
-                )}
+                目录:
+                <ul>
+                  {product.files.map((i: any) => (
+                    <li className="mt-2 mb-2" key={i.name}>
+                      <div className="flex justify-between items-center">
+                        <span>{i.name}</span>
+                        <div className="flex gap-2">
+                          <PageDownLoad pdfUrl={i.url} pdfName={i.name} />
+                          <PageLink url={i.url} />
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </CardContent>
             </Card>
           </div>
@@ -102,6 +88,45 @@ const ProductDetailsPage = async (props: {
           productSlug={product.slug}
           userId={userId || ''}
         />
+      </section>
+      <section>
+        {/* Action Column */}
+        <div>
+          <Card>
+            <CardContent className="p-4">
+              <div className="mb-2 flex justify-between">
+                <div>{t('Price')}</div>
+                <div>
+                  <ProductPrice value={Number(product.price)} />
+                </div>
+              </div>
+              <div className="mb-2 flex justify-between">
+                <div>{t('Status')}</div>
+                {product.stock > 0 ? (
+                  <Badge variant="outline">{t('In_tock')}</Badge>
+                ) : (
+                  <Badge variant="destructive">{t('Unavailable')}</Badge>
+                )}
+              </div>
+              {product.stock > 0 && (
+                <div className=" flex-center">
+                  <AddToCart
+                    userId={session?.user?.id as string}
+                    cart={cart}
+                    item={{
+                      productId: product.id,
+                      name: product.name,
+                      slug: product.slug,
+                      price: product.price,
+                      qty: 1,
+                      image: product.images![0],
+                    }}
+                  />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </section>
     </>
   );
