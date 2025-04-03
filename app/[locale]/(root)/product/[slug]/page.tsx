@@ -24,7 +24,6 @@ const ProductDetailsPage = async (props: {
   if (!product) return notFound;
   // const cart = await getMyCart();
   const session = await auth();
-  console.log('session', session);
   const user = session?.user;
   const userId = user?.id;
   const t = await getTranslations('Product');
