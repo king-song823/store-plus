@@ -66,6 +66,7 @@ export async function POST(req: NextRequest) {
       attach: orderIdOrigin,
       time_expire: new Date(Date.now() + 5 * 60 * 1000).toISOString(), // 5分钟后过期
       notify_url: `${WECHAT_NOTIFY_URL}/api/pay/wechat-notify`,
+      // notify_url: `https://7ec5-14-153-132-182.ngrok-free.app/api/pay/wechat-notify`,
       amount: {
         total: total_fee * 100,
         currency: 'CNY',

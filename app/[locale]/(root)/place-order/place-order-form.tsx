@@ -6,12 +6,12 @@ import { createOrder } from '@/lib/actions/order.action';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
-const PlaceOrderForm = () => {
+const PlaceOrderForm = ({ totalPrice }: { totalPrice: string }) => {
   const router = useRouter();
   const c = useTranslations('Common');
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const res = await createOrder();
+    const res = await createOrder(totalPrice);
     if (res.redirectTo) {
       router.push(res.redirectTo);
     }

@@ -1,19 +1,16 @@
 'use client';
 
 import { Badge } from '@/app/[locale]/components/ui/badge';
-import { Card, CardContent } from '@/app/[locale]/components/ui/card';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/app/[locale]/components/ui/table';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/app/[locale]/components/ui/card';
+
 import { formatCurrency, formatDateTime, formatId } from '@/lib/utils';
 import { Order } from '@/types';
-import Image from 'next/image';
-import { Link } from '@/i18n/navigation';
 
 import {
   PayPalButtons,
@@ -33,7 +30,7 @@ import StripePayment from './stripe-payment';
 import { useTranslations } from 'next-intl';
 import AliPayButton from '@/app/[locale]/components/AlipayButton';
 import WeChatPayButton from '@/app/[locale]/components/WeChatPayButton';
-import { RMB } from '@/lib/constants';
+import { HALF_YEAR_VIP, ONE_YEAR_VIP } from '@/lib/constants';
 // Checks the loading status of the PayPal script
 function PrintLoadingState() {
   const [{ isPending, isRejected }] = usePayPalScriptReducer();
@@ -48,18 +45,19 @@ function PrintLoadingState() {
 
 const OrderDetailsTable = ({
   order,
+  userId,
   paypalClientId,
   isAdmin,
   stripeClientSecret,
 }: {
   order: Omit<Order, 'paymentResult'>;
+  userId: string;
   paypalClientId: string;
   isAdmin: boolean;
   stripeClientSecret: string | null;
 }) => {
   const {
     // shippingAddress,
-    orderItems,
     // itemsPrice,
     // taxPrice,
     // shippingPrice,
@@ -73,7 +71,6 @@ const OrderDetailsTable = ({
 
   const c = useTranslations('Common');
   const a = useTranslations('Admin');
-  const p = useTranslations('Product');
 
   // Creates a PayPal order
   const handleCreatePayPalOrder = async () => {
@@ -88,7 +85,7 @@ const OrderDetailsTable = ({
 
   // Approves a PayPal order
   const handleApprovePayPalOrder = async (data: { orderID: string }) => {
-    const res = await approvePayPalOrder(order.id, data);
+    const res = await approvePayPalOrder(order.id, data, userId);
 
     toast({
       description: res.message,
@@ -183,44 +180,43 @@ const OrderDetailsTable = ({
           <Card>
             <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">{c('Order_Items')}</h2>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{p('Item')}</TableHead>
-                    <TableHead>{p('Quantity')}</TableHead>
-                    <TableHead>{p('Price')}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {orderItems.map((item) => (
-                    <TableRow key={item.slug}>
-                      <TableCell>
-                        <Link
-                          href={`/product/${item.slug}`}
-                          className="flex items-center"
-                        >
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            width={50}
-                            height={50}
-                          ></Image>
-                          <span className="px-2">{item.name}</span>
-                        </Link>
-                      </TableCell>
-                      <TableCell>
-                        <span className="px-2">{item.qty}</span>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-center">
-                          {RMB}
-                          {item.price}
-                        </span>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+
+              {order.totalPrice === HALF_YEAR_VIP ? (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>📌 半年套餐（183天）</CardTitle>
+                    <CardDescription className="gap-4">
+                      高效学习半年，紧跟讲义更新，知识尽在掌握！
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="gap-4">
+                    <p>
+                      ✅ 原价 <del className="">¥299</del>，新用户限时优惠{' '}
+                      <mark className="font-bold">¥{HALF_YEAR_VIP}</mark>
+                    </p>
+                    <p>✅ 支持讲义下载，随时随地学习，不受网络限制</p>
+                    <p>✅ 在有效期内随时查看讲义内容，掌握关键知识点</p>
+                    <p>✅ 讲义持续更新，确保您获取最新的学习资料</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>📌 一年套餐（365天）</CardTitle>
+                    <CardDescription className="gap-4">
+                      全程畅学一年，持续获取最新讲义，助力深度成长！
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="gap-4">
+                    <p>
+                      ✅ 原价 <del>¥399</del>，新用户限时优惠{' '}
+                      <mark className="font-bold">¥{ONE_YEAR_VIP}</mark>{' '}
+                    </p>
+                    <p>✅ 享受与半年套餐相同的权益，学习时间更充裕 </p>
+                    <p>✅ 长期规划，稳步提升，让知识沉淀更扎实</p>
+                  </CardContent>
+                </Card>
+              )}
             </CardContent>
           </Card>
         </div>

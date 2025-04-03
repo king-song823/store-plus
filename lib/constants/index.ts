@@ -50,7 +50,7 @@ export const productDefaultValues = {
 
 export const USER_ROLES = process.env.USER_ROLES
   ? process.env.USER_ROLES.split(', ')
-  : ['admin', 'techer', 'user'];
+  : ['admin', 'techer', 'user', 'vip'];
 
 export const reviewFormDefaultValues = {
   title: '',
@@ -61,3 +61,5 @@ export const reviewFormDefaultValues = {
 export const SENDER_EMAIL = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
 
 export const RMB = '¥';
+export const HALF_YEAR_VIP = '1';
+export const ONE_YEAR_VIP = '2';

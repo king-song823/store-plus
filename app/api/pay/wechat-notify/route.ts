@@ -2,7 +2,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { approveAliPayOrder } from '@/lib/actions/order.action';
+import { approveAliPayOrder, getOrderById } from '@/lib/actions/order.action';
 import { revalidatePath } from 'next/cache';
 
 // 读取商户 API V3 证书的 **微信支付平台公钥**
@@ -17,8 +17,6 @@ const WECHAT_API_V3_KEY = process.env.WECHAT_API_V3_KEY!;
 const wechatPublicKey = Buffer.from(WECHAT_APICLIENT_CERT, 'base64').toString(
   'utf-8'
 );
-
-console.log('wechatPublicKey', wechatPublicKey);
 
 /**
  * 验证微信支付签名
@@ -100,11 +98,17 @@ export async function POST(req: NextRequest) {
     // **更新订单状态**
     const { trade_state, amount, attach } = decryptedData;
     if (trade_state === 'SUCCESS') {
-      const res = await approveAliPayOrder(attach as string, {
-        id: attach,
-        status: trade_state,
-        total_amount: String(Number(amount.total) / 100),
-      });
+      const order = (await getOrderById(attach)) as any;
+      console.log('order最后的', order);
+      const res = await approveAliPayOrder(
+        attach as string,
+        {
+          id: attach,
+          status: trade_state,
+          total_amount: String(Number(amount.total) / 100),
+        },
+        order?.userId
+      );
       if (res.success) {
         revalidatePath('/user/orders');
       }

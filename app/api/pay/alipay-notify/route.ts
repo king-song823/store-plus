@@ -28,7 +28,8 @@ export async function POST(req: NextRequest) {
         id: string;
         status: string;
         total_amount: string;
-      }
+      },
+      '1'
     );
     console.log(`✅ 订单 ${orderId} 支付成功，支付宝交易号：${tradeNo}`);
   } else {
