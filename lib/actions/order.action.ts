@@ -3,44 +3,26 @@
 import { auth } from '@/auth';
 import { converToPlainObject, formatError, handleError } from '../utils';
 import { getUserById } from './user.actions';
-import { getMyCart } from './cart.action';
 import { insertOrderSchema } from '../validator';
 import { prisma } from '@/db/prisma';
 import { paypal } from '../paypal';
 import { revalidatePath } from 'next/cache';
 import { PAGE_SIZE } from '../constants';
 import { Prisma } from '@prisma/client';
-import { CartItem, PaymentResult } from '@/types';
-import { sendPurchaseReceipt } from '@/email';
+import { PaymentResult } from '@/types';
+// import { sendPurchaseReceipt } from '@/email';
 import { getLocale, getTranslations } from 'next-intl/server';
-export async function createOrder() {
+export async function createOrder(totalPrice: string) {
   try {
     const session = await auth();
     const locale = await getLocale();
     const c = await getTranslations('Common');
     if (!session) throw new Error(c('User_Is_Not_Authenticated'));
 
-    const cart = await getMyCart();
     const userId = session?.user?.id;
     if (!userId) throw new Error(c('User_Not_Found'));
 
     const user = await getUserById(userId);
-
-    if (!cart || cart.items.length === 0) {
-      return {
-        success: false,
-        message: c('Cart_Is_Empty'),
-        redirectTo: `/${locale}/cart`,
-      };
-    }
-
-    // if (!user.address) {
-    //   return {
-    //     success: false,
-    //     message: c('No_Shipping_Address'),
-    //     redirectTo: `/${locale}/shipping-address`,
-    //   };
-    // }
 
     if (!user.paymentMethod) {
       return {
@@ -57,38 +39,16 @@ export async function createOrder() {
       // shippingAddress: user.address,
       // shippingAddress: shippingAddressDefaultValues,
       paymentMethod: user.paymentMethod,
-      itemsPrice: cart.itemsPrice,
-      shippingPrice: cart.shippingPrice,
-      taxPrice: cart.taxPrice,
-      totalPrice: cart.totalPrice,
+      itemsPrice: totalPrice,
+      shippingPrice: totalPrice,
+      taxPrice: totalPrice,
+      totalPrice: totalPrice,
     });
 
     // Create a transaction to create order and order items in database
     const insertedOrderId = await prisma.$transaction(async (tx) => {
       // Create order
       const insertedOrder = await tx.order.create({ data: order });
-      // Create order items from the cart items
-      for (const item of cart.items as CartItem[]) {
-        await tx.orderItem.create({
-          data: {
-            ...item,
-            price: item.price,
-            orderId: insertedOrder.id,
-          },
-        });
-      }
-      // Clear cart
-      await tx.cart.update({
-        where: { id: cart.id },
-        data: {
-          items: [],
-          totalPrice: 0,
-          taxPrice: 0,
-          shippingPrice: 0,
-          itemsPrice: 0,
-        },
-      });
-
       return insertedOrder.id;
     });
 
@@ -111,11 +71,11 @@ export async function getOrderById(orderId: string) {
         id: orderId,
       },
       include: {
-        orderItems: true,
         user: {
           select: {
             name: true,
             email: true,
+            id: true,
           },
         },
       },
@@ -180,7 +140,8 @@ export async function approvePayPalOrder(
   orderId: string,
   data: {
     orderID: string;
-  }
+  },
+  userId: string
 ) {
   try {
     // Check order not found
@@ -211,6 +172,7 @@ export async function approvePayPalOrder(
         pricePaid:
           captureData.purchase_units[0]?.payment?.capture[0]?.amount?.value,
       },
+      userId,
     });
 
     revalidatePath(`/order/${orderId}`);
@@ -233,7 +195,8 @@ export async function approveAliPayOrder(
     id: string;
     status: string;
     total_amount: string;
-  }
+  },
+  userId: string
 ) {
   try {
     // Check order not found
@@ -254,8 +217,8 @@ export async function approveAliPayOrder(
         emailAddress: '',
         pricePaid: captureData.total_amount,
       },
+      userId,
     });
-    revalidatePath(`/user/orders`);
 
     return {
       success: true,
@@ -273,9 +236,11 @@ export async function approveAliPayOrder(
 export async function updateOrderToPaid({
   orderId,
   paymentResult,
+  userId,
 }: {
   orderId: string;
   paymentResult?: PaymentResult;
+  userId?: string;
 }) {
   //Check order found
   const c = await getTranslations('Common');
@@ -283,29 +248,15 @@ export async function updateOrderToPaid({
     where: {
       id: orderId,
     },
-    include: {
-      orderItems: true,
-    },
+    include: {},
   });
   if (!order) throw new Error(c('User_Not_Found'));
   //Check order is paid
   if (order.isPaid) throw new Error(c('Order_Is_Already_Paid'));
-  // Update product info with orderItem
-  await prisma.$transaction(async (tx) => {
-    for (const item of order.orderItems) {
-      await tx.product.update({
-        where: {
-          id: item.productId,
-        },
-        data: {
-          stock: {
-            increment: -item.qty,
-          },
-        },
-      });
-    }
-    // Set order to paid
+  console.log('order', userId);
 
+  await prisma.$transaction(async (tx) => {
+    // Set order to paid
     await tx.order.update({
       where: {
         id: orderId,
@@ -316,14 +267,23 @@ export async function updateOrderToPaid({
         paymentResult,
       },
     });
+    //update user to vip roel
+    await tx.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        role: 'vip',
+      },
+    });
   });
+
   // Get the updated order after the tansaction
   const updatedOrder = await prisma.order.findFirst({
     where: {
       id: orderId,
     },
     include: {
-      orderItems: true,
       user: {
         select: {
           name: true,
@@ -333,25 +293,21 @@ export async function updateOrderToPaid({
     },
   });
   if (!updatedOrder) throw new Error(c('Order_Not_Found'));
-  const params = {
-    ...updatedOrder,
-    orderItems: updatedOrder.orderItems?.map((i) => ({
-      ...i,
-      price: String(i.price),
-    })),
-    itemsPrice: String(updatedOrder.itemsPrice),
-    shippingPrice: String(updatedOrder.shippingPrice),
-    taxPrice: String(updatedOrder.taxPrice),
-    totalPrice: String(updatedOrder.totalPrice),
-  };
+  // const params = {
+  //   ...updatedOrder,
+  //   itemsPrice: String(updatedOrder.itemsPrice),
+  //   shippingPrice: String(updatedOrder.shippingPrice),
+  //   taxPrice: String(updatedOrder.taxPrice),
+  //   totalPrice: String(updatedOrder.totalPrice),
+  // };
   // Send the purchase receipt email with the updated order
-  sendPurchaseReceipt({
-    order: {
-      ...params,
-      // shippingAddress: updatedOrder.shippingAddress as ShippingAddress,
-      paymentResult: updatedOrder.paymentResult as PaymentResult,
-    },
-  });
+  // sendPurchaseReceipt({
+  //   order: {
+  //     ...params,
+  //     // shippingAddress: updatedOrder.shippingAddress as ShippingAddress,
+  //     paymentResult: updatedOrder.paymentResult as PaymentResult,
+  //   },
+  // });
 }
 
 // Get User Order

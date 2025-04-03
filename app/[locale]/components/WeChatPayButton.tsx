@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@/app/[locale]/components/ui/button';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { toast } from '@/hooks/use-toast';
 import { useTranslations } from 'next-intl';
@@ -18,18 +18,47 @@ export default function PaymentPage({
   const [loading, setLoading] = useState(false);
   const c = useTranslations('Common');
   const router = useRouter();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [codeUrl, setQrcode] = useState('');
+  // 启动轮询
+  const startPolling = () => {
+    if (intervalRef.current) return; // 避免重复创建定时器
 
-  const startPolling = (orderId: string) => {
-    const interval = setInterval(async () => {
+    intervalRef.current = setInterval(async () => {
       const order = (await getOrderById(orderId)) as unknown as Order;
-      if (order.isPaid) {
-        clearInterval(interval);
+      console.log('-----order-----', order);
+      if (order?.isPaid) {
+        stopPolling();
+
         router.refresh();
+        setTimeout(() => {
+          toast({
+            variant: 'default',
+            description: '🎉恭喜你,已成为VIP!',
+          });
+        }, 1000);
       }
     }, 3000);
+
+    console.log('✅ 轮询已启动');
   };
+
+  // 停止轮询
+  const stopPolling = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+      console.log('⛔ 轮询已停止');
+    }
+  };
+  // 页面卸载时清除定时器
+  useEffect(() => {
+    return () => {
+      stopPolling();
+    };
+  }, []);
+
+  const [codeUrl, setQrcode] = useState('');
   const createOrder = async () => {
     try {
       setLoading(true);
@@ -47,7 +76,7 @@ export default function PaymentPage({
       const data = await res.json();
       if (data.code_url) {
         setQrcode(data.code_url); // 设置二维码链接
-        startPolling(orderId);
+        startPolling();
       } else {
         toast({
           variant: 'destructive',

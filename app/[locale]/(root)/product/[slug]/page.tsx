@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getProductBySlug } from '@/lib/actions/product.actions';
-import { Badge } from '@/app/[locale]/components/ui/badge';
+// import { Badge } from '@/app/[locale]/components/ui/badge';
 import { Card, CardContent } from '@/app/[locale]/components/ui/card';
 import { notFound } from 'next/navigation';
 import ProductPrice from '@/app/[locale]/components/shared/product/product-price';
 import ProductImages from '@/app/[locale]/components/shared/product/product-images';
-import AddToCart from '@/app/[locale]/components/shared/product/add-to-cart';
-import { getMyCart } from '@/lib/actions/cart.action';
+// import AddToCart from '@/app/[locale]/components/shared/product/add-to-cart';
+// import { getMyCart } from '@/lib/actions/cart.action';
 import { auth } from '@/auth';
 import ReviewList from './review-list';
 import Rating from '@/app/[locale]/components/shared/product/rating';
 import { getTranslations } from 'next-intl/server';
 import PageLink from './page-link';
 import PageDownLoad from './page-download';
+import { Link } from '@/i18n/navigation';
 
 const ProductDetailsPage = async (props: {
   params: Promise<{ slug: string }>;
@@ -21,9 +22,11 @@ const ProductDetailsPage = async (props: {
   const { slug } = params;
   const product = await getProductBySlug(slug);
   if (!product) return notFound;
-  const cart = await getMyCart();
+  // const cart = await getMyCart();
   const session = await auth();
-  const userId = session?.user?.id;
+  console.log('session', session);
+  const user = session?.user;
+  const userId = user?.id;
   const t = await getTranslations('Product');
 
   return (
@@ -64,18 +67,38 @@ const ProductDetailsPage = async (props: {
               <CardContent className="p-4">
                 目录:
                 <ul>
-                  {product.files.map((i: any) => (
-                    <li className="mt-2 mb-2" key={i.name}>
-                      <div className="flex justify-between items-center">
-                        <span>{i.name}</span>
-                        <div className="flex gap-2">
-                          <PageDownLoad pdfUrl={i.url} pdfName={i.name} />
-                          <PageLink url={i.url} />
+                  {product.files.map((i: any, index: number) => (
+                    <li className="mt-2 mb-2" key={index}>
+                      {user?.role === 'vip' ? (
+                        <div className="flex justify-between items-center">
+                          <span>{i.name}</span>
+                          <div className="flex gap-2">
+                            <PageDownLoad pdfUrl={i.url} pdfName={i.name} />
+                            <PageLink url={i.url} />
+                          </div>
                         </div>
-                      </div>
+                      ) : index <= 1 ? (
+                        <div className="flex justify-between items-center">
+                          <span>{i.name}</span>
+                          <div className="flex gap-2">
+                            <PageDownLoad pdfUrl={i.url} pdfName={i.name} />
+                            <PageLink url={i.url} />
+                          </div>
+                        </div>
+                      ) : (
+                        <></>
+                      )}
                     </li>
                   ))}
                 </ul>
+                {user?.role !== 'vip' && (
+                  <div className="text-center">
+                    <Link href="/place-order">
+                      <span className="font-bold">成为VIP会员</span>
+                      可查看更多讲义
+                    </Link>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -89,8 +112,7 @@ const ProductDetailsPage = async (props: {
           userId={userId || ''}
         />
       </section>
-      <section>
-        {/* Action Column */}
+      {/* <section>
         <div>
           <Card>
             <CardContent className="p-4">
@@ -127,7 +149,7 @@ const ProductDetailsPage = async (props: {
             </CardContent>
           </Card>
         </div>
-      </section>
+      </section> */}
     </>
   );
 };

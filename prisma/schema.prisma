@@ -115,9 +115,9 @@ model Order {
   isDelivered   Boolean   @default(false)
   deliveredAt   DateTime? @db.Timestamp(6)
   createdAt     DateTime  @default(now()) @db.Timestamp(6)
+  package       String    @default("365")
 
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  orderItems OrderItem[]
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model OrderItem {
@@ -129,7 +129,6 @@ model OrderItem {
   slug      String
   image     String
 
-  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@id([orderId, productId], map: "orderitems_orderId_productId_pk")

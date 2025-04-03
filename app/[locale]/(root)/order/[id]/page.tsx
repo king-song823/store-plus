@@ -43,6 +43,7 @@ const OrderDetailsPage = async (props: {
   return (
     <OrderDetailsTable
       order={order}
+      userId={session?.user?.id as string}
       stripeClientSecret={client_secret}
       paypalClientId={process.env.PAYPAL_CLIENT_ID || 'sb'}
       isAdmin={session?.user.role === 'admin' || false}
