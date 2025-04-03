@@ -13,7 +13,8 @@ export const config = {
   },
   session: {
     strategy: 'jwt',
-    maxAge: 4 * 24 * 60 * 60,
+    maxAge: 60 * 60 * 4,
+    updateAge: 60 * 60,
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -75,6 +76,11 @@ export const config = {
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async jwt({ token, user, trigger, session }: any) {
+      console.log('token', token);
+      // 检查token是否已过期
+      if (token.exp && Date.now() > token.exp * 1000) {
+        return {}; // 返回空对象表示token失效
+      }
       // 首先检查用户是否仍然存在
       if (token.id) {
         const userExists = await prisma.user.findUnique({
@@ -117,8 +123,8 @@ export const config = {
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async session({ session, token, trigger }: any) {
-      // 如果token为空对象（用户被删除），返回空session
       if (Object.keys(token).length === 0) {
+        await signOut({ redirect: false });
         return {};
       }
       // Map the token data to the session object
