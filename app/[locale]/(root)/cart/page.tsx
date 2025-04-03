@@ -1,5 +1,5 @@
-import { getMyCart } from '@/lib/actions/cart.action';
-import CartTable from './cart-table';
+// import { getMyCart } from '@/lib/actions/cart.action';
+// import CartTable from './cart-table';
 import { getTranslations } from 'next-intl/server';
 export async function generateMetadata() {
   const t = await getTranslations('Common');
@@ -8,12 +8,8 @@ export async function generateMetadata() {
   };
 }
 const Cartpage = async () => {
-  const cart = await getMyCart();
-  return (
-    <>
-      <CartTable cart={cart} />
-    </>
-  );
+  // const cart = await getMyCart();
+  return <>{/* <CartTable cart={cart} /> */}</>;
 };
 
 export default Cartpage;

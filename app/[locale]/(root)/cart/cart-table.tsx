@@ -1,4 +1,9 @@
-// 'use client';
+'use client';
+const CartTable = () => {
+  return <></>;
+};
+
+export default CartTable;
 
 // import { Cart } from '@/types';
 // import { Link } from '@/i18n/navigation';
