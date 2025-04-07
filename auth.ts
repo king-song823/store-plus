@@ -76,7 +76,6 @@ export const config = {
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async jwt({ token, user, trigger, session }: any) {
-      console.log('token', token);
       // 检查token是否已过期
       if (token.exp && Date.now() > token.exp * 1000) {
         return {}; // 返回空对象表示token失效
@@ -123,6 +122,29 @@ export const config = {
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async session({ session, token, trigger }: any) {
+      if (token?.id) {
+        const user = await prisma.user.findUnique({
+          where: { id: token.id },
+          select: { vipExpiresAt: true },
+        });
+
+        console.log(
+          'user',
+          user,
+          !user?.vipExpiresAt || new Date(user.vipExpiresAt) < new Date()
+        );
+
+        if (!user?.vipExpiresAt || new Date(user.vipExpiresAt) < new Date()) {
+          await prisma.user.update({
+            where: { id: token.id },
+            data: {
+              role: 'user',
+              vipExpiresAt: null,
+            },
+          });
+          return {}; // 让 session 失效，前端自动登出
+        }
+      }
       if (Object.keys(token).length === 0) {
         await signOut({ redirect: false });
         return {};

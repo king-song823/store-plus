@@ -232,6 +232,12 @@ export async function approveAliPayOrder(
   }
 }
 
+const calculateVipExpiresAt = (packageDays: number) => {
+  const vipExpiresAt = new Date();
+  vipExpiresAt.setDate(vipExpiresAt.getDate() + packageDays);
+  return vipExpiresAt;
+};
+
 // Update order to paid in database
 export async function updateOrderToPaid({
   orderId,
@@ -253,7 +259,7 @@ export async function updateOrderToPaid({
   if (!order) throw new Error(c('User_Not_Found'));
   //Check order is paid
   if (order.isPaid) throw new Error(c('Order_Is_Already_Paid'));
-  console.log('order', userId);
+  console.log('order', calculateVipExpiresAt(Number(order.package)));
 
   await prisma.$transaction(async (tx) => {
     // Set order to paid
@@ -267,6 +273,7 @@ export async function updateOrderToPaid({
         paymentResult,
       },
     });
+
     //update user to vip roel
     await tx.user.update({
       where: {
@@ -274,6 +281,7 @@ export async function updateOrderToPaid({
       },
       data: {
         role: 'vip',
+        vipExpiresAt: calculateVipExpiresAt(Number(order.package)),
       },
     });
   });

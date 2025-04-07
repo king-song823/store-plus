@@ -1,5 +1,5 @@
 const VipPages = () => {
-  return <></>;
+  return <>VIP</>;
 };
 
 export default VipPages;

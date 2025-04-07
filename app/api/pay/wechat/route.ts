@@ -5,7 +5,7 @@ import crypto from 'crypto';
 const WECHAT_APP_ID = process.env.WECHAT_APP_ID!;
 const WECHAT_MCH_ID = process.env.WECHAT_MCH_ID!;
 const WECHAT_SERIAL_NO = process.env.WECHAT_SERIAL_NO!;
-const WECHAT_NOTIFY_URL = process.env.NEXT_PUBLIC_SERVER_URL!;
+// const WECHAT_NOTIFY_URL = process.env.NEXT_PUBLIC_SERVER_URL!;
 const WECHAT_APICLIENT_KEY = process.env.WECHAT_APICLIENT_KEY!;
 const WECHAT_API_URL = process.env.WECHAT_API_URL!;
 
@@ -65,8 +65,8 @@ export async function POST(req: NextRequest) {
       out_trade_no,
       attach: orderIdOrigin,
       time_expire: new Date(Date.now() + 5 * 60 * 1000).toISOString(), // 5分钟后过期
-      notify_url: `${WECHAT_NOTIFY_URL}/api/pay/wechat-notify`,
-      // notify_url: `https://7ec5-14-153-132-182.ngrok-free.app/api/pay/wechat-notify`,
+      // notify_url: `${WECHAT_NOTIFY_URL}/api/pay/wechat-notify`,
+      notify_url: `https://7ec5-14-153-132-182.ngrok-free.app/api/pay/wechat-notify`,
       amount: {
         total: total_fee * 100,
         currency: 'CNY',
