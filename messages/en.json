@@ -9,6 +9,11 @@
     "Error_Page": "Page Error"
   },
   "Common": {
+    "Password_Too_Weak": "Password must be at least 6 characters",
+    "Password_Need_Uppercase": "Password must contain an uppercase letter",
+    "Password_Need_Lowercase": "Password must contain a lowercase letter",
+    "Password_Need_Number": "Password must contain a number",
+    "Password_Need_SpecialChar": "Password must contain a special character like this [@$!%*?#&_]",
     "Wechat_Loading": "Generating QR code...",
     "WeChat_Pay": "WeChatPay",
     "AliPay": "AliPay",
@@ -128,7 +133,7 @@
     "Price_Must_Have_Exactly_Two_Decimal_Places": "Price must have exactly two decimal places (e.g., 49.99)",
     "Invalid_Email_Address": "Invalid email address",
     "Email_Must_Be_At_Least_3_Characters": "Email must be at least 3 characters",
-    "Password_Must_Be_At_Least_3_Characters": "Password must be at least 3 characters",
+    "Password_Must_Be_At_Least_6_Characters": "Password must be at least 6 characters",
     "Confirm_Password_Must_Be_At_Least_3_Characters": "Confirm Password must be at least 3 characters",
     "Passwords_Dont_Match": "Passwords don't match",
     "Product_Is_Required": "Product is required",
@@ -199,7 +204,7 @@
     "Actions": "Actions",
     "Details": "Details",
     "Address_Must_Be_At_Least_3_Characters": "Address must be at least 3 characters",
-    "Name_Must_Be_At_Least_3_Characters": "Name must be at least 3 characters"
+    "Name_Must_Be_At_Least_3_Characters": "Name must be at least 2 characters"
   },
   "Product": {
     "Customer_Reviews": "Customer Reviews",

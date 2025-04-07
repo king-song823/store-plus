@@ -117,7 +117,6 @@ export const config = {
       if (session?.user.name && trigger === 'update') {
         token.name = session.user.name;
       }
-
       return token;
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -127,12 +126,6 @@ export const config = {
           where: { id: token.id },
           select: { vipExpiresAt: true },
         });
-
-        console.log(
-          'user',
-          user,
-          !user?.vipExpiresAt || new Date(user.vipExpiresAt) < new Date()
-        );
 
         if (!user?.vipExpiresAt || new Date(user.vipExpiresAt) < new Date()) {
           await prisma.user.update({

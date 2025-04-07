@@ -86,11 +86,19 @@ const ProfileForm = () => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
-                  <Input
-                    placeholder="Name"
-                    {...field}
-                    className="input-field"
-                  />
+                  <Input {...field} className="input-field" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <Input {...field} className="input-field" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -3,6 +3,10 @@
     "NewestArrivals": "最新上架"
   },
   "Common": {
+    "Password_Need_Uppercase": "密码需包含大写字母",
+    "Password_Need_Lowercase": "需包含小写字母",
+    "Password_Need_Number": "需包含数字",
+    "Password_Need_SpecialChar": "需包含特殊[@$!%*?#&_]字符",
     "AliPay": "支付宝支付",
     "Wechat_Loading": "二维码生成中...",
     "WeChat_Pay": "微信支付",
@@ -122,8 +126,8 @@
     "Price_Must_Have_Exactly_Two_Decimal_Places": "价格必须精确到两位小数（例如：49.99）",
     "Invalid_Email_Address": "无效的电子邮件地址",
     "Email_Must_Be_At_Least_3_Characters": "电子邮件地址至少需要 3 个字符",
-    "Password_Must_Be_At_Least_3_Characters": "密码至少需要 3 个字符",
-    "Confirm_Password_Must_Be_At_Least_3_Characters": "确认密码至少需要 3 个字符",
+    "Password_Must_Be_At_Least_6_Characters": "密码至少需要 6 个字符",
+    "Confirm_Password_Must_Be_At_Least_3_Characters": "确认密码至少需要 6 个字符",
     "Passwords_Dont_Match": "密码不匹配",
     "Product_Is_Required": "必须选择产品",
     "Slug_Is_Required": "Slug 是必填项",
@@ -193,7 +197,7 @@
     "Actions": "操作",
     "Details": "详情",
     "Address_Must_Be_At_Least_3_Characters": "地址必须至少包含 3 个字符",
-    "Name_Must_Be_At_Least_3_Characters": "名称必须至少包含 3 个字符"
+    "Name_Must_Be_At_Least_3_Characters": "名称必须至少包含 2 个字符"
   },
   "Product": {
     "Customer_Reviews": "用户评价",
