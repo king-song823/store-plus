@@ -24,10 +24,12 @@ import {
   updateProfilePassword,
 } from '@/lib/actions/user.actions';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 
 const ProfileForm = () => {
   const { data: session, update } = useSession();
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof updateProfileSchema>>({
     resolver: zodResolver(updateProfileSchema),
@@ -80,6 +82,7 @@ const ProfileForm = () => {
       variant: !res?.success ? 'destructive' : 'default',
       description: res?.message,
     });
+    router.push(`/sign-in`);
   };
 
   return (

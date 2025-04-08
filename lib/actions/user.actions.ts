@@ -102,7 +102,6 @@ export async function updateProfilePassword(
 
   try {
     const data = await updateProfilePasswordSchema.parse(values);
-    console.log('data', data);
     const session = await auth();
 
     const currentUser = (await prisma.user.findFirst({
@@ -133,6 +132,8 @@ export async function updateProfilePassword(
       where: { id: currentUser.id },
       data: { password: newPasswordHash },
     });
+    await signOut({ redirect: false });
+
     return {
       success: true,
       message: c('Password_Changed_Successfully'),
