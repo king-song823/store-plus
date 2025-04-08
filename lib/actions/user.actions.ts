@@ -6,9 +6,10 @@ import {
   // shippingAddressSchema,
   signInFormSchema,
   signUpFormSchema,
+  updateProfilePasswordSchema,
   updateUserSchema,
 } from '../validator';
-import { hashSync } from 'bcrypt-ts-edge';
+import { compare, hashSync } from 'bcrypt-ts-edge';
 import { prisma } from '@/db/prisma';
 import { formatError, handleError } from '../utils';
 // import { ShippingAddress } from '@/types';
@@ -91,6 +92,57 @@ export async function getUserById(userId: string) {
 
   if (!user) throw new Error(c('User_not_found'));
   return user;
+}
+
+// change profile password
+export async function updateProfilePassword(
+  values: z.infer<typeof updateProfilePasswordSchema>
+) {
+  const c = await getTranslations('Common');
+
+  try {
+    const data = await updateProfilePasswordSchema.parse(values);
+    console.log('data', data);
+    const session = await auth();
+
+    const currentUser = (await prisma.user.findFirst({
+      where: {
+        id: session?.user?.id,
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    })) as any;
+
+    if (!currentUser) throw new Error(c('User_not_found'));
+    const isCorrect = await compare(data.currentPassword, currentUser.password);
+    if (!isCorrect) {
+      return {
+        success: false,
+        message: c('Incorrect_Current_Password'),
+      };
+    }
+    const isSame = await compare(data.newPassword, currentUser.password);
+    if (isSame) {
+      return {
+        success: false,
+        message: c('New_Password_Cannot_Be_Same_As_Old'),
+      };
+    }
+    const newPasswordHash = hashSync(data.newPassword, 10);
+
+    await prisma.user.update({
+      where: { id: currentUser.id },
+      data: { password: newPasswordHash },
+    });
+    return {
+      success: true,
+      message: c('Password_Changed_Successfully'),
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: formatError(error),
+    };
+  }
 }
 
 // Update user's address

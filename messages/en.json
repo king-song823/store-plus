@@ -9,6 +9,12 @@
     "Error_Page": "Page Error"
   },
   "Common": {
+    "Incorrect_Current_Password": "Incorrect current password",
+    "New_Password_Cannot_Be_Same_As_Old": "New password cannot be the same as the old one",
+    "Password_Changed_Successfully": "Password changed successfully",
+    "New_Password": "New Password",
+    "Old_Password": "Current Password",
+    "Change_Password": "Change Password",
     "Password_Too_Weak": "Password must be at least 6 characters",
     "Password_Need_Uppercase": "Password must contain an uppercase letter",
     "Password_Need_Lowercase": "Password must contain a lowercase letter",

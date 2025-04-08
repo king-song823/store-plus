@@ -3,6 +3,12 @@
     "NewestArrivals": "最新上架"
   },
   "Common": {
+    "Incorrect_Current_Password": "当前密码错误",
+    "New_Password_Cannot_Be_Same_As_Old": "新密码不能与旧密码相同",
+    "Password_Changed_Successfully": "修改密码成功",
+    "New_Password": "新密码",
+    "Old_Password": "原始密码",
+    "Change_Password": "修改密码",
     "Password_Need_Uppercase": "密码需包含大写字母",
     "Password_Need_Lowercase": "需包含小写字母",
     "Password_Need_Number": "需包含数字",
