@@ -40,7 +40,7 @@ const OrdersPage = async (props: {
               <TableHead>{c('Date')}</TableHead>
               <TableHead>{c('Total_price')}</TableHead>
               <TableHead>{c('Paid')}</TableHead>
-              <TableHead>{c('Delivered')}</TableHead>
+              {/* <TableHead>{c('Delivered')}</TableHead> */}
               <TableHead>{c('Actions')}</TableHead>
             </TableRow>
           </TableHeader>
@@ -59,11 +59,11 @@ const OrdersPage = async (props: {
                     ? formatDateTime(order.paidAt).dateTime
                     : c('Not_paid')}
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   {order.isDelivered && order.deliveredAt
                     ? formatDateTime(order.deliveredAt).dateTime
                     : c('Not_delivered')}
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                   <Link href={`/order/${order.id}`}>
                     <span className="px-2">{c('Details')}</span>

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getProductBySlug } from '@/lib/actions/product.actions';
 // import { Badge } from '@/app/[locale]/components/ui/badge';
-import { Card, CardContent } from '@/app/[locale]/components/ui/card';
 import { notFound } from 'next/navigation';
 import ProductPrice from '@/app/[locale]/components/shared/product/product-price';
 import ProductImages from '@/app/[locale]/components/shared/product/product-images';
@@ -11,9 +10,9 @@ import { auth } from '@/auth';
 import ReviewList from './review-list';
 import Rating from '@/app/[locale]/components/shared/product/rating';
 import { getTranslations } from 'next-intl/server';
-import PageLink from './page-link';
-import PageDownLoad from './page-download';
-import { Link } from '@/i18n/navigation';
+
+import { getUserById } from '@/lib/actions/user.actions';
+import HandoutsList from './handouts-list';
 
 const ProductDetailsPage = async (props: {
   params: Promise<{ slug: string }>;
@@ -25,7 +24,8 @@ const ProductDetailsPage = async (props: {
   // const cart = await getMyCart();
   const session = await auth();
   const user = session?.user;
-  const userId = user?.id;
+  const userId = user?.id as string;
+  const currentUser = await getUserById(userId);
   const t = await getTranslations('Product');
 
   return (
@@ -62,44 +62,11 @@ const ProductDetailsPage = async (props: {
             </div>
           </div>
           <div className="col-span-2">
-            <Card>
-              <CardContent className="p-4">
-                目录:
-                <ul>
-                  {product.files.map((i: any, index: number) => (
-                    <li className="mt-2 mb-2" key={index}>
-                      {user?.role === 'vip' ? (
-                        <div className="flex justify-between items-center">
-                          <span>{i.name}</span>
-                          <div className="flex gap-2">
-                            <PageDownLoad pdfUrl={i.url} pdfName={i.name} />
-                            <PageLink url={i.url} />
-                          </div>
-                        </div>
-                      ) : index <= 1 ? (
-                        <div className="flex justify-between items-center">
-                          <span>{i.name}</span>
-                          <div className="flex gap-2">
-                            <PageDownLoad pdfUrl={i.url} pdfName={i.name} />
-                            <PageLink url={i.url} />
-                          </div>
-                        </div>
-                      ) : (
-                        <></>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-                {user?.role !== 'vip' && (
-                  <div className="text-center">
-                    <Link href="/place-order">
-                      <span className="font-bold">成为VIP会员</span>
-                      可查看更多讲义
-                    </Link>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <HandoutsList
+              files={product.files}
+              user={user}
+              currentUser={currentUser}
+            />
           </div>
         </div>
       </section>

@@ -1,4 +1,4 @@
-import { EllipsisVertical, ShoppingCart } from 'lucide-react';
+import { EllipsisVertical, Crown } from 'lucide-react';
 import { Button } from '@/app/[locale]/components/ui/button';
 import UserButton from './user-button';
 import Search from './search';
@@ -21,8 +21,8 @@ const Menu = async () => {
           <ModeToggle />
           <IntelModeToggle />
           <Button asChild variant="ghost">
-            <Link href="/cart" locale="zh">
-              <ShoppingCart />
+            <Link href="/vip" locale="zh">
+              <Crown />
               {t('Carts')}
             </Link>
           </Button>
@@ -42,8 +42,8 @@ const Menu = async () => {
               <IntelModeToggle />
 
               <Button asChild variant="ghost">
-                <Link href="/cart">
-                  <ShoppingCart />
+                <Link href="/vip">
+                  <Crown />
                   {t('Carts')}
                 </Link>
               </Button>

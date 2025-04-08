@@ -54,33 +54,36 @@ export const signInFormSchema = z.object({
     .min(3, i18JsonZh['Common']['Email_Must_Be_At_Least_3_Characters']),
   password: z
     .string()
-    .min(3, i18JsonZh['Common']['Password_Must_Be_At_Least_3_Characters']),
+    .min(6, i18JsonZh['Common']['Password_Must_Be_At_Least_6_Characters']),
 });
 
 // Schema for signing up a user
-export const signUpFormSchema = z.object({
-  name: z
-    .string()
-    .min(3, i18JsonZh['Common']['Name_Must_Be_At_Least_3_Characters']),
-  email: z
-    .string()
-    .email(i18JsonZh['Common']['Invalid_Email_Address'])
-    .min(3, i18JsonZh['Common']['Email_Must_Be_At_Least_3_Characters']),
-  password: z
-    .string()
-    .min(3, i18JsonZh['Common']['Password_Must_Be_At_Least_3_Characters']),
-  confirmPassword: z
-    .string()
-    .min(
-      3,
-      i18JsonZh['Common']['Confirm_Password_Must_Be_At_Least_3_Characters']
-    )
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .refine((data: any) => data.password === data.confirmPassword, {
-      message: i18JsonZh['Common']['Passwords_Dont_Match'],
-      path: ['confirmPassword'],
-    }),
-});
+export const signUpFormSchema = z
+  .object({
+    name: z
+      .string()
+      .min(2, i18JsonZh['Common']['Name_Must_Be_At_Least_3_Characters']),
+    email: z
+      .string()
+      .email(i18JsonZh['Common']['Invalid_Email_Address'])
+      .min(3, i18JsonZh['Common']['Email_Must_Be_At_Least_3_Characters']),
+    password: z
+      .string()
+      .min(6, i18JsonZh['Common']['Password_Must_Be_At_Least_6_Characters'])
+      .regex(/[a-z]/, i18JsonZh.Common.Password_Need_Lowercase)
+      .regex(/\d/, i18JsonZh.Common.Password_Need_Number)
+      .regex(/[@$!%*?#&_]/, i18JsonZh.Common.Password_Need_SpecialChar),
+    confirmPassword: z
+      .string()
+      .min(
+        6,
+        i18JsonZh['Common']['Confirm_Password_Must_Be_At_Least_3_Characters']
+      ),
+  }) // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  .refine((data: any) => data.password === data.confirmPassword, {
+    message: i18JsonZh['Common']['Passwords_Dont_Match'],
+    path: ['confirmPassword'],
+  });
 
 // Schema for Cart
 export const cartItemSchema = z.object({
@@ -111,7 +114,7 @@ export const shippingAddressSchema = z.object({
     .min(3, i18JsonZh['Common']['Name_Must_Be_At_Least_3_Characters']),
   streetAddress: z
     .string()
-    .min(3, i18JsonZh['Common']['Address_Must_Be_At_Least_3_Characters']),
+    .min(2, i18JsonZh['Common']['Address_Must_Be_At_Least_3_Characters']),
   city: z
     .string()
     .min(2, i18JsonZh['Common']['City_Must_Be_At_Least_3_Characters']),
@@ -169,11 +172,35 @@ export const paymentResultSchema = z.object({
 export const updateProfileSchema = z.object({
   name: z
     .string()
-    .min(3, i18JsonZh['Common']['Name_Must_Be_At_Least_3_Characters']),
+    .min(2, i18JsonZh['Common']['Name_Must_Be_At_Least_3_Characters']),
   email: z
     .string()
     .min(3, i18JsonZh['Common']['Email_Must_Be_At_Least_3_Characters']),
 });
+
+export const updateProfilePasswordSchema = z
+  .object({
+    currentPassword: z
+      .string()
+      .min(6, i18JsonZh.Common.Password_Must_Be_At_Least_6_Characters),
+    newPassword: z
+      .string()
+      .min(6, i18JsonZh['Common']['Password_Must_Be_At_Least_6_Characters'])
+      .regex(/[a-z]/, i18JsonZh.Common.Password_Need_Lowercase)
+      .regex(/\d/, i18JsonZh.Common.Password_Need_Number)
+      .regex(/[@$!%*?#&_]/, i18JsonZh.Common.Password_Need_SpecialChar),
+    confirmPassword: z
+      .string()
+      .min(
+        6,
+        i18JsonZh['Common']['Confirm_Password_Must_Be_At_Least_3_Characters']
+      ),
+  })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  .refine((data: any) => data.newPassword === data.confirmPassword, {
+    message: i18JsonZh['Common']['Passwords_Dont_Match'],
+    path: ['confirmPassword'],
+  });
 // Schema for updating a product
 export const updateProductSchema = insertProductSchema.extend({
   id: z.string().min(1, i18JsonZh['Common']['Id_Is_Required']),
