@@ -10,16 +10,15 @@ import { auth } from '@/auth';
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: {
+  searchParams: Promise<{
     page: string;
     year?: string;
     name?: string;
     fileName?: string;
     category?: string;
-  };
+  }>;
 }) {
   const session = await auth();
-  console.log('session', session);
   const user = session?.user;
   const { page = '1', year, name, fileName, category } = await searchParams;
   let products: unknown = [];
