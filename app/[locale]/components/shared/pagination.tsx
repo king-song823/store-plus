@@ -2,6 +2,7 @@
 
 import { Button } from '../ui/button';
 import { formUrlQuery } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 const Pagination = ({
   page,
@@ -13,6 +14,7 @@ const Pagination = ({
   urlParamName?: string;
 }) => {
   const router = useRouter();
+  const c = useTranslations('Common');
   const searchParams = useSearchParams();
   // Handle Page Change
   const onClick = (btnType: string) => {
@@ -34,7 +36,7 @@ const Pagination = ({
         onClick={() => onClick('prev')}
         disabled={Number(page) <= 1}
       >
-        Previous
+        {c('Previous')}
       </Button>
       <Button
         size="lg"
@@ -43,7 +45,7 @@ const Pagination = ({
         onClick={() => onClick('next')}
         disabled={Number(page) >= totalPages}
       >
-        Next
+        {c('Next')}
       </Button>
     </div>
   );

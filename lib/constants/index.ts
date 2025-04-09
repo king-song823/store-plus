@@ -44,6 +44,7 @@ export const productDefaultValues = {
   stock: 0,
   rating: '',
   numReviews: '',
+  fileNamesStr: '',
   // isFeatured: false,
   // banner: null,
 };
