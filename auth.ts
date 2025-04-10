@@ -5,6 +5,7 @@ import type { NextAuthConfig } from 'next-auth';
 
 import { prisma } from '@/db/prisma';
 import { PrismaAdapter } from '@auth/prisma-adapter';
+import { VIP_ROlE } from './lib/constants';
 
 export const config = {
   pages: {
@@ -127,10 +128,8 @@ export const config = {
           select: { vipExpiresAt: true },
         });
 
-        console.log('user', user, token);
-
         if (
-          token?.role === 'vip' &&
+          token?.role === VIP_ROlE &&
           (!user?.vipExpiresAt || new Date(user.vipExpiresAt) < new Date())
         ) {
           await prisma.user.update({

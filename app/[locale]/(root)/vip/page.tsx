@@ -7,6 +7,22 @@ import {
   CardHeader,
 } from '@/app/[locale]/components/ui/card';
 import { auth } from '@/auth';
+import { Button } from '../../components/ui/button';
+import { Link } from '@/i18n/navigation';
+import { Label } from '../../components/ui/label';
+import { VIP_ROlE } from '@/lib/constants';
+import { getUserById } from '@/lib/actions/user.actions';
+
+function getVipRemainingDays(vipExpiresAt: Date): number {
+  if (!vipExpiresAt) {
+    return 0;
+  }
+  const now = new Date();
+  const diffTime = vipExpiresAt.getTime() - now.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays > 0 ? diffDays : 0;
+}
+
 export default async function ProductsPage({
   searchParams,
 }: {
@@ -20,12 +36,13 @@ export default async function ProductsPage({
 }) {
   const session = await auth();
   const user = session?.user;
-  const { page = '1', year, name, fileName, category } = await searchParams;
+  const currentUser = await getUserById(user?.id as string);
   let products: unknown = [];
   let totalPages = null;
   const categorise = await getAllCategories();
-
-  if (user?.role === 'vip') {
+  const remainingDays = getVipRemainingDays(currentUser?.vipExpiresAt as Date);
+  const { page = '1', year, name, fileName, category } = await searchParams;
+  if (user?.role === VIP_ROlE) {
     const res = await getProducts({
       page: Number(page),
       year: year ? Number(year) : undefined,
@@ -35,12 +52,37 @@ export default async function ProductsPage({
     });
     products = res.products;
     totalPages = res.totalPages;
-  } else {
   }
 
   return (
     <Card>
-      <CardHeader className="space-y-2" />
+      {user?.role !== VIP_ROlE && (
+        <CardHeader className="space-y-2">
+          <div className="flex items-center gap-4">
+            <Label>您还不是VIP, 暂时无法查看更多讲义</Label>
+            <Button size="sm">
+              <Link href={user ? '/place-order' : 'sign-in'}>成为VIP</Link>
+            </Button>
+          </div>
+        </CardHeader>
+      )}
+      {user?.role === VIP_ROlE && (
+        <CardHeader className="space-y-2">
+          {remainingDays > 0 ? (
+            <p className="text-green-600">
+              您的 VIP 还有{' '}
+              <span className="font-bold text-lg">{remainingDays}</span> 天
+            </p>
+          ) : (
+            <div className="flex gap-4 items-center">
+              <Label>您的 VIP 已过期</Label>
+              <Button size="sm">
+                <Link href={user ? '/place-order' : 'sign-in'}>成为VIP</Link>
+              </Button>
+            </div>
+          )}
+        </CardHeader>
+      )}
       <CardContent className="space-y-4">
         <div className="space-y-4">
           <ProductSearchForm

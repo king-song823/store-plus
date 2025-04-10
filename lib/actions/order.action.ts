@@ -7,7 +7,7 @@ import { insertOrderSchema } from '../validator';
 import { prisma } from '@/db/prisma';
 import { paypal } from '../paypal';
 import { revalidatePath } from 'next/cache';
-import { PAGE_SIZE } from '../constants';
+import { PAGE_SIZE, VIP_ROlE } from '../constants';
 import { Prisma } from '@prisma/client';
 import { PaymentResult } from '@/types';
 // import { sendPurchaseReceipt } from '@/email';
@@ -280,7 +280,7 @@ export async function updateOrderToPaid({
         id: userId,
       },
       data: {
-        role: 'vip',
+        role: VIP_ROlE,
         vipExpiresAt: calculateVipExpiresAt(Number(order.package)),
       },
     });
