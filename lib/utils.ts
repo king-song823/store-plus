@@ -73,6 +73,12 @@ export function formatCurrency(amount: number | string | null) {
   }
 }
 
+export const calculateVipExpiresAt = (packageDays: number) => {
+  const vipExpiresAt = new Date();
+  vipExpiresAt.setDate(vipExpiresAt.getDate() + packageDays);
+  return vipExpiresAt;
+};
+
 // Shorten ID
 export function formatId(id: string) {
   return `..${id.substring(id.length - 6)}`;

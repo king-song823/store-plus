@@ -1,7 +1,12 @@
 'use server';
 
 import { auth } from '@/auth';
-import { converToPlainObject, formatError, handleError } from '../utils';
+import {
+  calculateVipExpiresAt,
+  converToPlainObject,
+  formatError,
+  handleError,
+} from '../utils';
 import { getUserById } from './user.actions';
 import { insertOrderSchema } from '../validator';
 import { prisma } from '@/db/prisma';
@@ -232,12 +237,6 @@ export async function approveAliPayOrder(
   }
 }
 
-const calculateVipExpiresAt = (packageDays: number) => {
-  const vipExpiresAt = new Date();
-  vipExpiresAt.setDate(vipExpiresAt.getDate() + packageDays);
-  return vipExpiresAt;
-};
-
 // Update order to paid in database
 export async function updateOrderToPaid({
   orderId,
@@ -259,7 +258,6 @@ export async function updateOrderToPaid({
   if (!order) throw new Error(c('User_Not_Found'));
   //Check order is paid
   if (order.isPaid) throw new Error(c('Order_Is_Already_Paid'));
-  console.log('order', calculateVipExpiresAt(Number(order.package)));
 
   await prisma.$transaction(async (tx) => {
     // Set order to paid

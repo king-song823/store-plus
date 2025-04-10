@@ -11,10 +11,10 @@ import {
 } from '../validator';
 import { compare, hashSync } from 'bcrypt-ts-edge';
 import { prisma } from '@/db/prisma';
-import { formatError, handleError } from '../utils';
+import { calculateVipExpiresAt, formatError, handleError } from '../utils';
 // import { ShippingAddress } from '@/types';
 import { z } from 'zod';
-import { PAGE_SIZE } from '../constants';
+import { LIMIT_USER, PAGE_SIZE, VIP_ROlE } from '../constants';
 import { revalidatePath } from 'next/cache';
 import { Prisma } from '@prisma/client';
 import { getTranslations } from 'next-intl/server';
@@ -47,6 +47,7 @@ export async function signUp(prevState: unknown, formData: FormData) {
   const c = await getTranslations('Common');
 
   try {
+    const totalUsers = await prisma.user.count();
     const user = await signUpFormSchema.parse({
       name: formData.get('name'),
       email: formData.get('email'),
@@ -62,6 +63,9 @@ export async function signUp(prevState: unknown, formData: FormData) {
         name: user.name,
         email: user.email,
         password: user.password,
+        role: totalUsers > LIMIT_USER ? 'user' : VIP_ROlE,
+        vipExpiresAt:
+          totalUsers > LIMIT_USER ? null : calculateVipExpiresAt(30),
       },
     });
 

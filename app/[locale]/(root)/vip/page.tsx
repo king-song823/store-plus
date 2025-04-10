@@ -10,7 +10,7 @@ import { auth } from '@/auth';
 import { Button } from '../../components/ui/button';
 import { Link } from '@/i18n/navigation';
 import { Label } from '../../components/ui/label';
-import { VIP_ROlE } from '@/lib/constants';
+import { ADMIN_ROlE, VIP_ROlE } from '@/lib/constants';
 import { getUserById } from '@/lib/actions/user.actions';
 
 function getVipRemainingDays(vipExpiresAt: Date): number {
@@ -42,7 +42,7 @@ export default async function ProductsPage({
   const categorise = await getAllCategories();
   const remainingDays = getVipRemainingDays(currentUser?.vipExpiresAt as Date);
   const { page = '1', year, name, fileName, category } = await searchParams;
-  if (user?.role === VIP_ROlE) {
+  if (user?.role === VIP_ROlE || user?.role === ADMIN_ROlE) {
     const res = await getProducts({
       page: Number(page),
       year: year ? Number(year) : undefined,
@@ -51,12 +51,12 @@ export default async function ProductsPage({
       category,
     });
     products = res.products;
-    totalPages = res.totalPages;
+    totalPages = res.totalPages || null;
   }
 
   return (
     <Card>
-      {user?.role !== VIP_ROlE && (
+      {user?.role !== VIP_ROlE && user?.role !== ADMIN_ROlE && (
         <CardHeader className="space-y-2">
           <div className="flex items-center gap-4">
             <Label>您还不是VIP, 暂时无法查看更多讲义</Label>
@@ -66,23 +66,33 @@ export default async function ProductsPage({
           </div>
         </CardHeader>
       )}
-      {user?.role === VIP_ROlE && (
-        <CardHeader className="space-y-2">
-          {remainingDays > 0 ? (
-            <p className="text-green-600">
-              您的 VIP 还有{' '}
-              <span className="font-bold text-lg">{remainingDays}</span> 天
-            </p>
-          ) : (
-            <div className="flex gap-4 items-center">
-              <Label>您的 VIP 已过期</Label>
-              <Button size="sm">
-                <Link href={user ? '/place-order' : 'sign-in'}>成为VIP</Link>
-              </Button>
-            </div>
-          )}
-        </CardHeader>
-      )}
+      {user?.role === VIP_ROlE ||
+        (user?.role === ADMIN_ROlE && (
+          <CardHeader className="space-y-2">
+            {remainingDays > 0 ? (
+              <p className="text-green-600">
+                您的 VIP 还有{' '}
+                {user?.role === ADMIN_ROlE ? (
+                  <></>
+                ) : (
+                  <div>
+                    <span className="font-bold text-lg">{remainingDays}</span>{' '}
+                    天
+                  </div>
+                )}
+              </p>
+            ) : user?.role === ADMIN_ROlE ? (
+              <></>
+            ) : (
+              <div className="flex gap-4 items-center">
+                <Label>您的 VIP 已过期</Label>
+                <Button size="sm">
+                  <Link href={user ? '/place-order' : 'sign-in'}>成为VIP</Link>
+                </Button>
+              </div>
+            )}
+          </CardHeader>
+        ))}
       <CardContent className="space-y-4">
         <div className="space-y-4">
           <ProductSearchForm
