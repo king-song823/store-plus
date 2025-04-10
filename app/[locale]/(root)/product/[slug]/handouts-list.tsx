@@ -7,6 +7,10 @@ import { Link } from '@/i18n/navigation';
 import { User } from '@prisma/client';
 import { useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
+import { VIP_ROlE } from '@/lib/constants';
+import { Button } from '@/app/[locale]/components/ui/button';
+import { ToastAction } from '@radix-ui/react-toast';
+import { useRouter } from 'next/navigation';
 
 const HandoutsPage = ({
   files,
@@ -17,19 +21,47 @@ const HandoutsPage = ({
   user: any;
   currentUser: User;
 }) => {
+  const router = useRouter();
+  console.log('user', user);
   useEffect(() => {
-    if (
-      (user?.role !== 'vip' &&
+    if (user) {
+      if (user?.role !== VIP_ROlE && !currentUser?.vipExpiresAt) {
+        toast({
+          variant: 'default',
+          description: '点击此处成为VIP',
+          action: (
+            <ToastAction
+              altText="VIP"
+              onClick={() =>
+                user ? router.push('/place-order') : router.push('/sign-in')
+              }
+            >
+              成为VIP会员
+            </ToastAction>
+          ),
+        });
+      } else if (
+        user?.role !== VIP_ROlE &&
         currentUser?.vipExpiresAt &&
-        new Date(currentUser?.vipExpiresAt) < new Date()) ||
-      !currentUser?.vipExpiresAt
-    ) {
-      toast({
-        variant: 'destructive',
-        description: 'VIP 已过期, 请续费',
-      });
+        new Date(currentUser?.vipExpiresAt) < new Date()
+      ) {
+        toast({
+          variant: 'default',
+          description: 'VIP 已过期, 请续费',
+          action: (
+            <ToastAction
+              altText="撤销"
+              onClick={() =>
+                user ? router.push('/place-order') : router.push('/sign-in')
+              }
+            >
+              续费
+            </ToastAction>
+          ),
+        });
+      }
     }
-  }, [user, currentUser]);
+  }, [user, currentUser, router]);
   return (
     <>
       <Card>
@@ -38,7 +70,7 @@ const HandoutsPage = ({
           <ul>
             {files.map((i: any, index: number) => (
               <li className="mt-2 mb-2" key={index}>
-                {user?.role === 'vip' ? (
+                {user?.role === VIP_ROlE ? (
                   <div className="flex justify-between items-center">
                     <span>{i.name}</span>
                     <div className="flex gap-2">
@@ -60,15 +92,15 @@ const HandoutsPage = ({
               </li>
             ))}
           </ul>
-          {(user?.role !== 'vip' &&
+          {(user?.role !== VIP_ROlE &&
             currentUser?.vipExpiresAt &&
             new Date(currentUser?.vipExpiresAt) < new Date()) ||
             (!currentUser?.vipExpiresAt && (
-              <div className="text-center">
+              <div className="text-left flex items-center gap-4">
                 <Link href={user ? '/place-order' : '/sign-in'}>
-                  <span className="font-bold">成为VIP会员</span>
-                  可查看更多讲义
-                </Link>
+                  <Button size="sm">成为VIP会员</Button>
+                </Link>{' '}
+                可查看更多讲义
               </div>
             ))}
         </CardContent>

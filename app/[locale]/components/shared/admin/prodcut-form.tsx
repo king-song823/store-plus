@@ -292,10 +292,11 @@ const ProductForm = ({
                           onClientUploadComplete={(
                             res: { url: string; name: string }[]
                           ) => {
-                            form.setValue('files', [
-                              ...files,
-                              { name: res[0].name, url: res[0].url },
-                            ]);
+                            const newFiles = res.map((file) => ({
+                              name: file.name,
+                              url: file.url,
+                            }));
+                            form.setValue('files', [...files, ...newFiles]);
                           }}
                           onUploadError={(error: Error) => {
                             toast({
@@ -356,7 +357,8 @@ const ProductForm = ({
                         <UploadButton
                           endpoint="imageUploader"
                           onClientUploadComplete={(res: { url: string }[]) => {
-                            form.setValue('images', [...images, res[0].url]);
+                            const newFiles = res.map((file) => file.url);
+                            form.setValue('images', [...images, ...newFiles]);
                           }}
                           onUploadError={(error: Error) => {
                             toast({

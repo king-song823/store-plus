@@ -5,7 +5,7 @@ import { auth } from '@/auth';
 const f = createUploadthing();
 
 export const ourFileRouter = {
-  imageUploader: f({ image: { maxFileSize: '8MB' } })
+  imageUploader: f({ image: { maxFileSize: '8MB', maxFileCount: 30 } })
     .middleware(async () => {
       const session = await auth();
 
@@ -16,7 +16,7 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata }) => {
       return { uploadedBy: metadata.userId };
     }),
-  pdfUploader: f({ blob: { maxFileSize: '32MB' } })
+  pdfUploader: f({ blob: { maxFileSize: '32MB', maxFileCount: 30 } })
     .middleware(async () => {
       const session = await auth();
 

@@ -23,5 +23,9 @@ export default function DownloadButton({
     window.URL.revokeObjectURL(url); // 释放 URL
   };
 
-  return <Button onClick={handleDownload}>下载</Button>;
+  return (
+    <Button size="sm" onClick={handleDownload}>
+      下载
+    </Button>
+  );
 }

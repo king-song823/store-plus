@@ -6,7 +6,11 @@ const PageLink = ({ url }: { url: string }) => {
   const handleLink = () => {
     window.open(url, '_blank');
   };
-  return <Button onClick={handleLink}>预览</Button>;
+  return (
+    <Button size="sm" onClick={handleLink}>
+      预览
+    </Button>
+  );
 };
 
 export default PageLink;

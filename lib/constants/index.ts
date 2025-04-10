@@ -44,6 +44,7 @@ export const productDefaultValues = {
   stock: 0,
   rating: '',
   numReviews: '',
+  fileNamesStr: '',
   // isFeatured: false,
   // banner: null,
 };
@@ -63,3 +64,4 @@ export const SENDER_EMAIL = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
 export const RMB = '¥';
 export const HALF_YEAR_VIP = '1';
 export const ONE_YEAR_VIP = '2';
+export const VIP_ROlE = 'vip';

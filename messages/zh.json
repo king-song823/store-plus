@@ -3,6 +3,10 @@
     "NewestArrivals": "最新上架"
   },
   "Common": {
+    "Previous": "上一页",
+    "Next": "下一页",
+    "Year": "年份",
+    "Filter": "筛选条件",
     "Incorrect_Current_Password": "当前密码错误",
     "New_Password_Cannot_Be_Same_As_Old": "新密码不能与旧密码相同",
     "Password_Changed_Successfully": "修改密码成功",
@@ -230,6 +234,7 @@
     "Error_Page": "页面错误"
   },
   "Admin": {
+    "Create_Time": "创建时间",
     "Total_Revenue": "总收入",
     "Dashboard": "仪表板",
     "Overview": "概览",

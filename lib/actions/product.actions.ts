@@ -136,9 +136,9 @@ export async function createProduct(data: z.infer<typeof insertProductSchema>) {
   try {
     // Validate and create product
     const c = await getTranslations('Common');
-
+    const fileNamesStr = data.files.map((f) => f.name).join(' ');
     const product = insertProductSchema.parse(data);
-    await prisma.product.create({ data: product });
+    await prisma.product.create({ data: { ...product, fileNamesStr } });
 
     revalidatePath('/zh/admin/products');
 
@@ -151,10 +151,82 @@ export async function createProduct(data: z.infer<typeof insertProductSchema>) {
   }
 }
 
+export async function getProducts({
+  page = 1,
+  pageSize = 10,
+  year,
+  name,
+  fileName,
+  category,
+}: {
+  page: number;
+  pageSize?: number;
+  year?: number | string;
+  name?: string;
+  fileName?: string;
+  category?: string;
+}) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const whereConditions: any = {};
+
+  if (category) {
+    whereConditions.category = {
+      contains: category === 'all' ? '' : category,
+      mode: 'insensitive',
+    };
+  }
+
+  if (name) {
+    whereConditions.name = {
+      contains: name,
+      mode: 'insensitive',
+    };
+  }
+
+  if (fileName) {
+    whereConditions.fileNamesStr = { contains: fileName, mode: 'insensitive' };
+  }
+
+  if (year) {
+    if (year === 'all') {
+      whereConditions.createdAt = {
+        gte: '',
+        lte: '',
+      };
+    } else {
+      whereConditions.createdAt = {
+        gte: new Date(`${year}-01-01`),
+        lte: new Date(`${year}-12-31`),
+      };
+    }
+  }
+
+  const products = await prisma.product.findMany({
+    where: whereConditions,
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  const totalProducts = await prisma.product.count({
+    where: whereConditions,
+  });
+
+  return {
+    products,
+    totalPages: Math.ceil(totalProducts / pageSize),
+  };
+}
+
 // Update prodcut
 export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
   try {
+    const fileNamesStr = data.files.map((f) => f.name).join(' ');
     const params = updateProductSchema.parse(data);
+    console.log('params', params, fileNamesStr);
+
     const c = await getTranslations('Common');
 
     const product = await prisma.product.findFirst({
@@ -167,7 +239,10 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
       where: {
         id: params.id,
       },
-      data: params,
+      data: {
+        ...params,
+        fileNamesStr,
+      },
     });
     revalidatePath('/admin/products');
     return {

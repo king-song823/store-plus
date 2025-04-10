@@ -9,6 +9,10 @@
     "Error_Page": "Page Error"
   },
   "Common": {
+    "Previous": "Previous",
+    "Next": "Next",
+    "Year": "Year",
+    "Filter": "Filter_By",
     "Incorrect_Current_Password": "Incorrect current password",
     "New_Password_Cannot_Be_Same_As_Old": "New password cannot be the same as the old one",
     "Password_Changed_Successfully": "Password changed successfully",
@@ -231,6 +235,7 @@
     "Share_Your_Thoughts_With_Other_Customers": "Share your thoughts with other customers"
   },
   "Admin": {
+    "Create_Time": "Created Time",
     "Total_Revenue": "Total Revenue",
     "Dashboard": "Dashboard",
     "Overview": "Overview",
