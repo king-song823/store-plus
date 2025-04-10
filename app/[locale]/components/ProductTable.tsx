@@ -45,7 +45,7 @@ export default function ProductTable({
         <TableHeader>
           <TableRow>
             <TableHead>{t('Product_Name')}</TableHead>
-            <TableHead>{t('Product_Name')}</TableHead>
+            <TableHead>{t('Images')}</TableHead>
             <TableHead>{t('CATEGORY')}</TableHead>
             <TableHead>{t('Create_Time')}</TableHead>
             <TableHead>{t('RATING')}</TableHead>

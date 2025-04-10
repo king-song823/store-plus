@@ -15,7 +15,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
-import { VIP_ROlE } from '@/lib/constants';
+import { ADMIN_ROlE, VIP_ROlE } from '@/lib/constants';
 
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 10 }, (_, i) => String(currentYear - i));
@@ -110,14 +110,17 @@ export default function ProductSearchForm({
 
       <div className="flex gap-4">
         <Button
-          disabled={role !== VIP_ROlE}
+          disabled={role !== VIP_ROlE && role !== ADMIN_ROlE}
           onClick={handleSearch}
           className="h-10"
         >
           查询
         </Button>
 
-        <Button disabled={role !== VIP_ROlE} onClick={handleReset}>
+        <Button
+          disabled={role !== VIP_ROlE && role !== ADMIN_ROlE}
+          onClick={handleReset}
+        >
           重置
         </Button>
       </div>

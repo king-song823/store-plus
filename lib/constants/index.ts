@@ -65,3 +65,5 @@ export const RMB = '¥';
 export const HALF_YEAR_VIP = '1';
 export const ONE_YEAR_VIP = '2';
 export const VIP_ROlE = 'vip';
+export const ADMIN_ROlE = 'admin';
+export const LIMIT_USER = Number(process.env.LIMIT_USER);
