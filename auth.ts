@@ -127,7 +127,12 @@ export const config = {
           select: { vipExpiresAt: true },
         });
 
-        if (!user?.vipExpiresAt || new Date(user.vipExpiresAt) < new Date()) {
+        console.log('user', user, token);
+
+        if (
+          token?.role === 'vip' &&
+          (!user?.vipExpiresAt || new Date(user.vipExpiresAt) < new Date())
+        ) {
           await prisma.user.update({
             where: { id: token.id },
             data: {
