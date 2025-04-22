@@ -6,6 +6,9 @@ import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/app/[locale]/components/ui/toaster';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { ErrorBoundary } from '@/app/[locale]/components/shared/ErrorBoundary';
+import { Suspense } from 'react';
+import Loading from './loading';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -30,17 +33,19 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={`${inter.className}`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NextIntlClientProvider messages={messages}>
-            {children}
-          </NextIntlClientProvider>
-          <Toaster />
-        </ThemeProvider>
+        <Suspense fallback={<Loading />}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <NextIntlClientProvider messages={messages}>
+              <ErrorBoundary>{children}</ErrorBoundary>
+            </NextIntlClientProvider>
+          </ThemeProvider>
+        </Suspense>
+        <Toaster />
       </body>
     </html>
   );
