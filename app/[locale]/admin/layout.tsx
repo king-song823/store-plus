@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation';
 import Menu from '@/app/[locale]/components/shared/header/menu';
 import { MainNav } from './main-nav';
 import AdminSearch from '@/app/[locale]/components/shared/admin/admin-search';
+import { ErrorBoundary } from '../components/shared/ErrorBoundary';
 export default async function AdminLayout({
   children,
 }: {
@@ -31,7 +32,7 @@ export default async function AdminLayout({
           </div>
         </div>
         <div className="flex-1 space-y-4 p-8 pt-6 container mx-auto">
-          {children}
+          <ErrorBoundary>{children}</ErrorBoundary>
         </div>
       </div>
     </>

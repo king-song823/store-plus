@@ -263,7 +263,7 @@ const ProductForm = ({
                 <FormLabel>{t('Files')}</FormLabel>
                 <Card>
                   <CardContent className="space-y-2 mt-2 min-h-48">
-                    <div className="flex-start space-x-2">
+                    <div className="flex-start space-x-2 flex-wrap gap-4">
                       {files?.map((file, index: number) => (
                         <div
                           key={file.url}

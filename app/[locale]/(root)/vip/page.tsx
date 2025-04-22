@@ -12,6 +12,7 @@ import { Link } from '@/i18n/navigation';
 import { Label } from '../../components/ui/label';
 import { ADMIN_ROlE, VIP_ROlE } from '@/lib/constants';
 import { getUserById } from '@/lib/actions/user.actions';
+import { ErrorBoundary } from '../../components/shared/ErrorBoundary';
 
 function getVipRemainingDays(vipExpiresAt: Date): number {
   if (!vipExpiresAt) {
@@ -93,17 +94,19 @@ export default async function ProductsPage({
             )}
           </CardHeader>
         ))}
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 mt-8">
         <div className="space-y-4">
           <ProductSearchForm
             role={user?.role}
             categorise={JSON.parse(JSON.stringify(categorise))}
           />
-          <ProductTable
-            products={JSON.parse(JSON.stringify(products))}
-            totalPages={totalPages}
-            currentPage={Number(page)}
-          />
+          <ErrorBoundary>
+            <ProductTable
+              products={JSON.parse(JSON.stringify(products))}
+              totalPages={totalPages}
+              currentPage={Number(page)}
+            />
+          </ErrorBoundary>
         </div>
       </CardContent>
     </Card>
