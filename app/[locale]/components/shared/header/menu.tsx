@@ -10,8 +10,8 @@ import {
 } from '@/app/[locale]/components/ui/sheet';
 import ModeToggle from '../model-toggle';
 import { getTranslations } from 'next-intl/server';
-import { Link } from '@/i18n/navigation';
 import IntelModeToggle from '../intel-mode-toggle';
+import Link from 'next/link';
 const Menu = async () => {
   const t = await getTranslations('Common');
   return (
@@ -21,7 +21,7 @@ const Menu = async () => {
           <ModeToggle />
           <IntelModeToggle />
           <Button asChild variant="ghost">
-            <Link href="/vip" locale="zh">
+            <Link href="/vip">
               <Crown />
               {t('Carts')}
             </Link>

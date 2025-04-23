@@ -3,7 +3,7 @@ import {
   CardContent,
   CardHeader,
 } from '@/app/[locale]/components/ui/card';
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
 import ProductPrice from '@/app/[locale]/components/shared/product/product-price';
 // import { Product } from '@/types';

@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { Link } from '@/i18n/navigation';
 import {
   Card,
   CardContent,
@@ -12,6 +11,7 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import SignUpForm from './signup-form';
 import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 
 export async function generateMetadata() {
   const t = await getTranslations('Common');

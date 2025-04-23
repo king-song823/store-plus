@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import Menu from '@/app/[locale]/components/shared/header/menu';
 import { APP_NAME } from '@/lib/constants';
 import MainNav from './main-nav';

@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/app/[locale]/components/ui/card';
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import { APP_NAME } from '@/lib/constants';
 import Image from 'next/image';
 import CredentialsSignInForm from './credentials-signin-form';

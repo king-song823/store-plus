@@ -26,17 +26,16 @@ export default function PaymentPage({
 
     intervalRef.current = setInterval(async () => {
       const order = (await getOrderById(orderId)) as unknown as Order;
-      console.log('-----order-----', order);
       if (order?.isPaid) {
         stopPolling();
 
-        router.refresh();
         setTimeout(() => {
           toast({
             variant: 'default',
             description: '🎉恭喜你,已成为VIP!',
           });
         }, 1000);
+        router.push('/vip');
       }
     }, 3000);
 

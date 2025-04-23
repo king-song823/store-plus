@@ -8,7 +8,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/app/[locale]/components/ui/dropdown-menu';
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import { useRouter } from '@/i18n/navigation';
 import { signOutUser } from '@/lib/actions/user.actions';
 

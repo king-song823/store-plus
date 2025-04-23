@@ -11,7 +11,7 @@ import {
 } from '@/app/[locale]/components/ui/table';
 import { getAllOrders, deleteOrder } from '@/lib/actions/order.action';
 import { formatCurrency, formatDateTime, formatId } from '@/lib/utils';
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import DeleteDialog from '@/app/[locale]/components/shared/delete-dialog';
 import { getTranslations } from 'next-intl/server';
 

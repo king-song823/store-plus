@@ -2,7 +2,7 @@
 import { Button } from '@/app/[locale]/components/ui/button';
 import { Input } from '@/app/[locale]/components/ui/input';
 import { Label } from '@/app/[locale]/components/ui/label';
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import { signInDefaultValues } from '@/lib/constants';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';

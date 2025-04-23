@@ -1,4 +1,4 @@
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import Pagination from '@/app/[locale]/components/shared/pagination';
 import { Button } from '@/app/[locale]/components/ui/button';
 import {

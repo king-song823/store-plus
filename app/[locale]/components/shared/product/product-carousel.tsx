@@ -9,7 +9,7 @@
 //   CarouselPrevious,
 // } from '@/components/ui/carousel';
 // import { Product } from '@/types';
-// import { Link } from '@/i18n/navigation';
+// import Link from 'next/link';
 // import Image from 'next/image';
 
 // const ProductCarousel = ({ data }: { data: Product[] }) => {

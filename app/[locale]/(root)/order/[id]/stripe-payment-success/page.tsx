@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link } from '@/i18n/navigation';
+
 import { notFound, redirect } from 'next/navigation';
 import Stripe from 'stripe';
 import { getOrderById } from '@/lib/actions/order.action';
 import { Button } from '@/app/[locale]/components/ui/button';
 import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 export async function generateMetadata() {
   const t = await getTranslations('Common');

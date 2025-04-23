@@ -25,7 +25,7 @@ import { UploadButton } from '@/lib/uploadthing';
 import { Card, CardContent } from '@/app/[locale]/components/ui/card';
 import { X } from 'lucide-react';
 import Image from 'next/image';
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 // import { Checkbox } from '@/components/ui/checkbox';
 
