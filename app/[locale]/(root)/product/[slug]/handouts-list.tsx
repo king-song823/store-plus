@@ -69,7 +69,7 @@ const HandoutsPage = ({
       <Card>
         <CardContent className="p-4">
           目录:
-          <ul className="max-h-[500px] overflow-y-auto">
+          <ul className="lg:max-h-[500px] lg:overflow-y-auto">
             {files.map((i: any, index: number) => (
               <li className="mt-2 mb-2" key={index}>
                 {user?.role === VIP_ROlE || user?.role === ADMIN_ROlE ? (
