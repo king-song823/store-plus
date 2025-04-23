@@ -8,7 +8,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { ErrorBoundary } from '@/app/[locale]/components/shared/ErrorBoundary';
 import { Suspense } from 'react';
-import Loading from './loading';
+import Loading from './[locale]/loading';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
