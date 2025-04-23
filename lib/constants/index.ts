@@ -62,8 +62,8 @@ export const reviewFormDefaultValues = {
 export const SENDER_EMAIL = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
 
 export const RMB = '¥';
-export const HALF_YEAR_VIP = '1';
-export const ONE_YEAR_VIP = '2';
+export const HALF_YEAR_VIP = '199';
+export const ONE_YEAR_VIP = '299';
 export const VIP_ROlE = 'vip';
 export const ADMIN_ROlE = 'admin';
 export const LIMIT_USER = Number(process.env.LIMIT_USER);

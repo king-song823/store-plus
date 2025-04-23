@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/app/[locale]/components/ui/table';
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import Charts from './charts';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';

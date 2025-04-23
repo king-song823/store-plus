@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { Review } from '@/types';
-import { Link } from '@/i18n/navigation';
 import { useState } from 'react';
 import ReviewForm from './review-form';
 import { getReviews } from '@/lib/actions/review.action';
@@ -17,6 +16,7 @@ import { Calendar, User } from 'lucide-react';
 import { formatDateTime } from '@/lib/utils';
 import Rating from '@/app/[locale]/components/shared/product/rating';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 
 const ReviewList = ({
   userId,

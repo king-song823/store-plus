@@ -8,7 +8,7 @@ import {
 } from '@/app/[locale]/components/ui/table';
 import { getMyOrders } from '@/lib/actions/order.action';
 import { formatCurrency, formatDateTime, formatId } from '@/lib/utils';
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import Pagination from '@/app/[locale]/components/shared/pagination';
 import { getTranslations } from 'next-intl/server';
 

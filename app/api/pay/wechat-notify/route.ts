@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
         order?.userId
       );
       if (res.success) {
-        revalidatePath('/user/orders');
+        revalidatePath('/vip');
       }
     }
 

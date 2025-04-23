@@ -8,7 +8,7 @@ import {
 } from '@/app/[locale]/components/ui/card';
 import { auth } from '@/auth';
 import { Button } from '../../components/ui/button';
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import { Label } from '../../components/ui/label';
 import { ADMIN_ROlE, VIP_ROlE } from '@/lib/constants';
 import { getUserById } from '@/lib/actions/user.actions';

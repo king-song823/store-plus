@@ -11,12 +11,12 @@ import {
   TableRow,
 } from '@/app/[locale]/components/ui/table';
 import { formatId } from '@/lib/utils';
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import { getAllUsers, deleteUser } from '@/lib/actions/user.actions';
 import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata() {
-  const t = await getTranslations('Common');
+  const t = await getTranslations('Admin');
   return {
     title: t('Admin_Users'),
   };

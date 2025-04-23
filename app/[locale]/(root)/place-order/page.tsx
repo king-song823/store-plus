@@ -4,7 +4,7 @@ import { getUserById } from '@/lib/actions/user.actions';
 import { auth } from '@/auth';
 // import { Cart, ShippingAddress } from '@/types';
 // import { Cart } from '@/types';
-// import { Link } from '@/i18n/navigation';
+// import Link from 'next/link';
 // import { Button } from '@/app/[locale]/components/ui/button';
 // import { getMyCart } from '@/lib/actions/cart.action';
 import { getTranslations } from 'next-intl/server';

@@ -4,7 +4,7 @@ import {
   getAllProducts,
   getAllCategories,
 } from '@/lib/actions/product.actions';
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
 const prices = [

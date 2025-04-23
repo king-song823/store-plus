@@ -3,7 +3,7 @@
 import { Card, CardContent } from '@/app/[locale]/components/ui/card';
 import PageLink from './page-link';
 import PageDownLoad from './page-download';
-import { Link } from '@/i18n/navigation';
+import Link from 'next/link';
 import { User } from '@prisma/client';
 import { useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
