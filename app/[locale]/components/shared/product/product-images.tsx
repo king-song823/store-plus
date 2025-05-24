@@ -9,7 +9,7 @@ const ProductImages = ({ images }: { images: string[] }) => {
   return (
     <div className="space-y-4">
       <Image
-        src={images[current]}
+        src={images[current] || '/images/logo.webp'}
         alt="hero image"
         width={500}
         height={500}

@@ -1,5 +1,4 @@
 'use client';
-import { useRouter } from '@/i18n/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { useTransition } from 'react';
 import { paymentMethodSchema } from '@/lib/validator';
@@ -23,6 +22,7 @@ import {
 } from '@/app/[locale]/components/ui/radio-group';
 import { updateUserPaymentMethod } from '@/lib/actions/user.actions';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/router';
 
 const PaymentMethodForm = ({
   preferredPaymentMethod,

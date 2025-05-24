@@ -10,7 +10,6 @@ import { shippingAddressDefaultValues } from '@/lib/constants';
 // import { toast } from '@/hooks/use-toast';
 import { useTransition } from 'react';
 // import { updateUserAddress } from '@/lib/actions/user.actions';
-import { useRouter } from '@/i18n/navigation';
 import {
   Form,
   FormControl,
@@ -23,6 +22,7 @@ import { Input } from '@/app/[locale]/components/ui/input';
 import { Button } from '@/app/[locale]/components/ui/button';
 import { ArrowRight, Loader } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/router';
 
 const ShippingAddressForm = ({
   address,
