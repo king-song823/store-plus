@@ -61,7 +61,7 @@ export default function ProductTable({
                 <TableCell>
                   <Image
                     priority={true}
-                    src={product.images![0]}
+                    src={product.images![0] || '/images/logo.webp'}
                     alt={product.name}
                     className="aspect-square object-cover rounded"
                     height={50}

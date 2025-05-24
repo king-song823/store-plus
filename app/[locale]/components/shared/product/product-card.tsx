@@ -19,7 +19,7 @@ const ProductCard = async ({ product }: { product: any }) => {
         <Link href={`/product/${product.slug}`}>
           <Image
             priority={true}
-            src={product.images![0]}
+            src={product.images[0] || '/images/logo.webp'}
             alt={product.name}
             className="aspect-square object-cover rounded"
             height={300}

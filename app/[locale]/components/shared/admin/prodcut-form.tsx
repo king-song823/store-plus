@@ -20,13 +20,13 @@ import { Button } from '@/app/[locale]/components/ui/button';
 import { Textarea } from '@/app/[locale]/components/ui/textarea';
 import { createProduct, updateProduct } from '@/lib/actions/product.actions';
 import { toast } from '@/hooks/use-toast';
-import { useRouter } from '@/i18n/navigation';
 import { UploadButton } from '@/lib/uploadthing';
 import { Card, CardContent } from '@/app/[locale]/components/ui/card';
 import { X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 // import { Checkbox } from '@/components/ui/checkbox';
 
 const ProductForm = ({
